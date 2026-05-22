@@ -22,7 +22,12 @@ export function useAppData() {
   }, [])
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(appData))
+    const { screenshots, iconDataUrl, ...persistable } = appData
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(persistable))
+    } catch {
+      // quota exceeded — silently ignore
+    }
   }, [appData])
 
   function setField<K extends keyof AppData>(key: K, value: AppData[K]) {
