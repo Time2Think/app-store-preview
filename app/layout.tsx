@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Roboto_Flex } from 'next/font/google'
+import { Inter, Roboto } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({
@@ -8,8 +8,9 @@ const inter = Inter({
   display: 'swap',
 })
 
-const roboto = Roboto_Flex({
+const roboto = Roboto({
   subsets: ['latin'],
+  weight: ['400', '500', '700'],
   variable: '--font-android',
   display: 'swap',
 })

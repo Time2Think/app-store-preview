@@ -31,7 +31,7 @@ function DragScrollX({ children, className }: { children: React.ReactNode, class
 function StatusBar({ t }: { t: AndroidTokens }) {
   return (
     <div className="flex justify-between items-center flex-shrink-0 relative z-10"
-      style={{ color: t.onSurface, height: '40px', padding: '0 20px' }}>
+      style={{ color: t.onSurface, height: '36px', padding: '8px 20px 0' }}>
       <span style={{ fontSize: '13px', fontWeight: 500 }}>9:41</span>
       <div className="flex items-center gap-[5px]">
         <svg viewBox="0 0 18 12" width="15" height="11" className="fill-current">
@@ -323,7 +323,7 @@ function SearchView({ data, t, onUploadIcon }: {
       <StatusBar t={t} />
 
       {/* Title bar */}
-      <div className="flex-shrink-0 flex items-center gap-3 px-3 py-2" style={{ background: t.surface }}>
+      <div className="flex-shrink-0 flex items-center gap-2 px-2 py-1" style={{ background: t.surface }}>
         <button className="w-10 h-10 flex items-center justify-center rounded-full">
           <ArrowLeft className="w-5 h-5" style={{ color: t.onSurface }} strokeWidth={2}/>
         </button>

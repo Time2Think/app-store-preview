@@ -59,8 +59,8 @@ function DragScrollX({ children, className }: { children: React.ReactNode, class
 function StatusBar({ t }: { t: IOSTokens }) {
   return (
     <div className="flex justify-between items-center flex-shrink-0 relative z-10"
-      style={{ color: t.label, height: '48px', padding: '0 28px' }}>
-      <span style={{ fontSize: '15px', fontWeight: 600, letterSpacing: '-0.3px' }}>9:41</span>
+      style={{ color: t.label, height: '54px', padding: '14px 28px 0' }}>
+      <span style={{ fontSize: '16px', fontWeight: 600, letterSpacing: '-0.3px' }}>9:41</span>
       <div className="flex items-center gap-[5px]">
         <svg viewBox="0 0 18 12" width="17" height="11" className="fill-current">
           <rect x="0" y="8" width="3" height="4" rx="0.5"/>
@@ -275,8 +275,8 @@ function SearchAppCard({
           </div>
         )}
         <div className="flex-1 min-w-0 pt-0">
-          <p className="font-semibold leading-tight line-clamp-2" style={{ color: t.label, fontSize: '14px' }}>{name}</p>
-          <p className="mt-0.5 line-clamp-2" style={{ color: t.secondaryLabel, fontSize: '12px', lineHeight: '1.2' }}>{subtitle}</p>
+          <p className="leading-[1.15] line-clamp-2" style={{ color: t.label, fontSize: '15px', fontWeight: 600 }}>{name}</p>
+          <p className="mt-1 line-clamp-2" style={{ color: t.secondaryLabel, fontSize: '13px', lineHeight: '1.25' }}>{subtitle}</p>
         </div>
         <div className="flex flex-col items-center gap-0.5 flex-shrink-0 pt-1">
           <button
