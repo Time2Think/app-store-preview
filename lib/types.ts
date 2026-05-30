@@ -19,6 +19,11 @@ export interface StoreVisibility {
 
 export type PreviewMode = 'detail' | 'search'
 
+export interface UploadHandlers {
+  onUploadIcon?: (dataUrl: string) => void
+  onUploadScreenshot?: (index: number, dataUrl: string) => void
+}
+
 export const DEFAULT_APP_DATA: AppData = {
   appName: 'Your App Name',
   subtitle: 'App Subtitle',

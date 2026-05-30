@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react'
 import { AppData, DEFAULT_APP_DATA } from './types'
 
-const STORAGE_KEY = 'app-store-preview-data'
-
-function loadFromStorage(): AppData {
+function loadFromStorage(key: string): AppData {
   if (typeof window === 'undefined') return DEFAULT_APP_DATA
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = localStorage.getItem(key)
     if (!raw) return DEFAULT_APP_DATA
     return { ...DEFAULT_APP_DATA, ...JSON.parse(raw) }
   } catch {
@@ -14,21 +12,22 @@ function loadFromStorage(): AppData {
   }
 }
 
-export function useAppData() {
+export function useAppData(storageKey = 'app-store-preview-data') {
   const [appData, setAppData] = useState<AppData>(DEFAULT_APP_DATA)
 
   useEffect(() => {
-    setAppData(loadFromStorage())
-  }, [])
+    setAppData(loadFromStorage(storageKey))
+  }, [storageKey])
 
   useEffect(() => {
     const { screenshots, iconDataUrl, ...persistable } = appData
+    void screenshots; void iconDataUrl
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(persistable))
+      localStorage.setItem(storageKey, JSON.stringify(persistable))
     } catch {
-      // quota exceeded — silently ignore
+      // quota exceeded
     }
-  }, [appData])
+  }, [appData, storageKey])
 
   function setField<K extends keyof AppData>(key: K, value: AppData[K]) {
     setAppData(prev => ({ ...prev, [key]: value }))
@@ -36,7 +35,7 @@ export function useAppData() {
 
   function clearData() {
     setAppData(DEFAULT_APP_DATA)
-    localStorage.removeItem(STORAGE_KEY)
+    localStorage.removeItem(storageKey)
   }
 
   return { appData, setField, clearData }

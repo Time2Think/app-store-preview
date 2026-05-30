@@ -26,7 +26,7 @@ export function ScreenshotUploader({ screenshots, onChange }: ScreenshotUploader
 
   const handleFiles = useCallback((files: FileList | null) => {
     if (!files) return
-    const remaining = 8 - screenshots.length
+    const remaining = 10 - screenshots.length
     const toAdd = Array.from(files).slice(0, remaining)
     toAdd.forEach(file => {
       const reader = new FileReader()
@@ -68,10 +68,10 @@ export function ScreenshotUploader({ screenshots, onChange }: ScreenshotUploader
         </SortableContext>
       </DndContext>
 
-      {screenshots.length < 8 && (
+      {screenshots.length < 10 && (
         <label className="flex items-center justify-center w-full h-16 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:border-blue-400 transition-colors">
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            + Add screenshots ({screenshots.length}/8)
+            + Add screenshots ({screenshots.length}/10)
           </span>
           <input
             type="file"
