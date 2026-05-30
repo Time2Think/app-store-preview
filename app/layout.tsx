@@ -1,5 +1,18 @@
 import type { Metadata } from 'next'
+import { Inter, Roboto_Flex } from 'next/font/google'
 import './globals.css'
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-ios',
+  display: 'swap',
+})
+
+const roboto = Roboto_Flex({
+  subsets: ['latin'],
+  variable: '--font-android',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Store Preview Tool',
@@ -8,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${roboto.variable}`}>
       <body className="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white h-screen overflow-hidden">
         {children}
       </body>

@@ -5,6 +5,7 @@ import { AppForm } from '@/components/AppForm'
 import { PhoneFrame } from '@/components/PhoneFrame'
 import { GooglePlayPreview } from '@/components/GooglePlayPreview'
 import { AppStorePreview } from '@/components/AppStorePreview'
+import { ReferenceOverlay } from '@/components/ReferenceOverlay'
 import { useAppData } from '@/lib/useAppData'
 import { useDarkMode } from '@/lib/useDarkMode'
 import { downloadPreview } from '@/lib/export'
@@ -20,6 +21,7 @@ export default function Home() {
   const [previewMode, setPreviewMode] = useState<PreviewMode>('search')
   const [activeSlot, setActiveSlot] = useState<DesignSlot>('A')
   const [compareOn, setCompareOn] = useState(false)
+  const [overlayOpacity, setOverlayOpacity] = useState(0)
 
   const active = activeSlot === 'A' ? dataA : dataB
 
@@ -55,6 +57,8 @@ export default function Home() {
         onToggleDark={toggleDark}
         previewMode={previewMode}
         onPreviewModeChange={setPreviewMode}
+        overlayOpacity={overlayOpacity}
+        onOverlayChange={setOverlayOpacity}
       />
 
       <div className="flex flex-1 overflow-hidden">
@@ -115,7 +119,10 @@ export default function Home() {
                     Google Play
                   </span>
                   <div id={`gp-preview-${slot}`}>
-                    <PhoneFrame type="android">
+                    <PhoneFrame
+                      type="android"
+                      overlay={<ReferenceOverlay store="android" mode={previewMode} opacity={overlayOpacity} />}
+                    >
                       <GooglePlayPreview
                         data={d}
                         dark={dark}
@@ -142,7 +149,10 @@ export default function Home() {
                     App Store
                   </span>
                   <div id={`as-preview-${slot}`}>
-                    <PhoneFrame type="ios">
+                    <PhoneFrame
+                      type="ios"
+                      overlay={<ReferenceOverlay store="ios" mode={previewMode} opacity={overlayOpacity} />}
+                    >
                       <AppStorePreview
                         data={d}
                         dark={dark}

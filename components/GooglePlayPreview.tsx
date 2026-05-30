@@ -1,89 +1,13 @@
 import { useRef } from 'react'
+import { ArrowLeft, Search, Mic, MoreVertical, Star, ChevronDown, Download, ChevronRight, Gamepad2, AppWindow, BookOpen, User } from 'lucide-react'
 import { AppData, PreviewMode, UploadHandlers } from '@/lib/types'
-import { formatReviews, formatRating, formatPrice } from '@/lib/formatters'
+import { formatReviews, formatPrice } from '@/lib/formatters'
+import { androidTokens, AndroidTokens, Theme } from '@/lib/androidTokens'
 
 interface Props extends UploadHandlers {
   data: AppData
   dark?: boolean
   mode?: PreviewMode
-}
-
-type C = {
-  bg: string
-  surface1: string
-  surface2: string
-  text: string
-  sub: string
-  divider: string
-  searchBg: string
-  primary: string
-  primaryText: string
-  onPrimary: string
-  outline: string
-  chip: string
-  chipActive: string
-  navBg: string
-}
-
-function colors(dark: boolean): C {
-  if (dark) return {
-    bg: '#121212',
-    surface1: '#1e1e1e',
-    surface2: '#2d2d2d',
-    text: '#e8eaed',
-    sub: '#9aa0a6',
-    divider: '#3c4043',
-    searchBg: '#303134',
-    primary: '#8ab4f8',
-    primaryText: '#8ab4f8',
-    onPrimary: '#1A73E8',
-    outline: '#5f6368',
-    chip: '#2d2d2d',
-    chipActive: '#1e3a5f',
-    navBg: '#1e1e1e',
-  }
-  return {
-    bg: '#ffffff',
-    surface1: '#f8f9fa',
-    surface2: '#f1f3f4',
-    text: '#202124',
-    sub: '#5f6368',
-    divider: '#e8eaed',
-    searchBg: '#f1f3f4',
-    primary: '#1A73E8',
-    primaryText: '#1A73E8',
-    onPrimary: '#ffffff',
-    outline: '#dadce0',
-    chip: '#f1f3f4',
-    chipActive: '#d2e3fc',
-    navBg: '#ffffff',
-  }
-}
-
-function Stars({ rating, c, size = 12, prefix }: { rating: number, c: C, size?: number, prefix: string }) {
-  const r = Math.round(rating * 10)
-  return (
-    <div className="flex gap-px">
-      {[1, 2, 3, 4, 5].map(i => {
-        const full = rating >= i
-        const partial = !full && rating > i - 1
-        const pct = partial ? Math.round((rating - (i - 1)) * 100) : 0
-        const id = `${prefix}${i}x${r}`
-        return (
-          <svg key={i} width={size} height={size} viewBox="0 0 24 24">
-            <defs>
-              <linearGradient id={id}>
-                <stop offset={`${full ? 100 : pct}%`} stopColor="#F5A623" />
-                <stop offset={`${full ? 100 : pct}%`} stopColor={c.divider} />
-              </linearGradient>
-            </defs>
-            <path fill={`url(#${id})`}
-              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-          </svg>
-        )
-      })}
-    </div>
-  )
 }
 
 function DragScrollX({ children, className }: { children: React.ReactNode, className?: string }) {
@@ -104,27 +28,24 @@ function DragScrollX({ children, className }: { children: React.ReactNode, class
   )
 }
 
-function StatusBar({ c }: { c: C }) {
+function StatusBar({ t }: { t: AndroidTokens }) {
   return (
-    <div className="flex justify-between items-center flex-shrink-0"
-      style={{ color: c.text, height: '34px', padding: '0 16px' }}>
-      <span style={{ fontSize: '11px', fontWeight: 500 }}>9:41</span>
+    <div className="flex justify-between items-center flex-shrink-0 relative z-10"
+      style={{ color: t.onSurface, height: '40px', padding: '0 20px' }}>
+      <span style={{ fontSize: '13px', fontWeight: 500 }}>9:41</span>
       <div className="flex items-center gap-[5px]">
-        {/* Signal */}
-        <svg viewBox="0 0 18 12" width="13" height="10" className="fill-current">
+        <svg viewBox="0 0 18 12" width="15" height="11" className="fill-current">
           <rect x="0" y="8" width="3" height="4" rx="0.5"/>
           <rect x="4" y="6" width="3" height="6" rx="0.5"/>
           <rect x="8" y="3" width="3" height="9" rx="0.5"/>
           <rect x="12" y="0" width="3" height="12" rx="0.5"/>
         </svg>
-        {/* WiFi */}
-        <svg viewBox="0 0 16 12" width="12" height="9" className="fill-current">
+        <svg viewBox="0 0 16 12" width="14" height="11" className="fill-current">
           <path d="M8 11.5l1.5-1.5c-.83-.83-2.17-.83-3 0L8 11.5zm-3-3l1.5 1.5c.83-.83 2.17-.83 3 0L11 8.5c-1.66-1.66-4.34-1.66-6 0zM2 5.5l1.5 1.5c2.5-2.5 6.5-2.5 9 0L14 5.5C10.69 2.19 5.31 2.19 2 5.5z"/>
         </svg>
-        {/* Battery */}
-        <svg viewBox="0 0 26 12" width="20" height="10">
-          <rect x="0.5" y="0.5" width="22" height="11" rx="3" ry="3" fill="none" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1"/>
-          <rect x="2" y="2" width="19" height="8" rx="1.5" ry="1.5" fill="currentColor"/>
+        <svg viewBox="0 0 26 12" width="24" height="11">
+          <rect x="0.5" y="0.5" width="22" height="11" rx="3" fill="none" stroke="currentColor" strokeOpacity="0.4"/>
+          <rect x="2" y="2" width="19" height="8" rx="1.5" fill="currentColor"/>
           <rect x="23.5" y="4" width="1.5" height="4" rx="0.5" fill="currentColor" fillOpacity="0.4"/>
         </svg>
       </div>
@@ -133,36 +54,26 @@ function StatusBar({ c }: { c: C }) {
 }
 
 const GP_TABS = [
-  { id: 'games', label: 'Games',
-    path: 'M12 2a10 10 0 100 20A10 10 0 0012 2zM9 16H7v-2H5v-2h2v-2h2v2h2v2H9v2zm8-6h-2v2h-2v-2h2V8h2v2z' },
-  { id: 'apps', label: 'Apps',
-    path: 'M4 4h5v5H4zm0 6h5v5H4zm6-6h5v5h-5zm0 6h5v5h-5zm6-6h4v5h-4zm0 6h4v5h-4z' },
-  { id: 'search', label: 'Search',
-    path: 'M15.5 14h-.79l-.28-.27A6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z' },
-  { id: 'books', label: 'Books',
-    path: 'M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H6V4h2v8l2.5-1.5L13 12V4h5v16z' },
-  { id: 'you', label: 'You',
-    path: 'M12 12c2.7 0 4-1.3 4-4s-1.3-4-4-4-4 1.3-4 4 1.3 4 4 4zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z' },
+  { label: 'Games', icon: Gamepad2, active: false },
+  { label: 'Apps', icon: AppWindow, active: false },
+  { label: 'Search', icon: Search, active: true },
+  { label: 'Books', icon: BookOpen, active: false },
+  { label: 'You', icon: User, active: false },
 ]
 
-function BottomNavBar({ c, activeTab = 'search' }: { c: C, activeTab?: string }) {
+function BottomNav({ t }: { t: AndroidTokens }) {
   return (
-    <div className="flex-shrink-0 flex justify-around items-end py-2 pb-3"
-      style={{ background: c.navBg, borderTop: `1px solid ${c.divider}` }}>
+    <div className="flex-shrink-0 flex justify-around items-center pt-1.5 pb-2"
+      style={{ background: t.navBg, borderTop: `1px solid ${t.outlineVariant}` }}>
       {GP_TABS.map(tab => {
-        const active = tab.id === activeTab
+        const Icon = tab.icon
         return (
-          <div key={tab.id} className="flex flex-col items-center gap-[2px] px-1 relative">
-            {active && (
-              <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-10 h-7 rounded-full"
-                style={{ background: c.chipActive }} />
-            )}
-            <svg viewBox="0 0 24 24" width="20" height="20" className="relative z-10"
-              style={{ fill: active ? c.primary : c.sub }}>
-              <path d={tab.path} />
-            </svg>
-            <span className="text-[8px] font-medium relative z-10"
-              style={{ color: active ? c.primary : c.sub }}>
+          <div key={tab.label} className="flex flex-col items-center gap-0.5">
+            <div className="px-5 py-1 rounded-full flex items-center justify-center"
+              style={{ background: tab.active ? t.primaryContainer : 'transparent' }}>
+              <Icon className="w-6 h-6" style={{ color: tab.active ? t.primary : t.onSurfaceVariant }} strokeWidth={tab.active ? 2.5 : 1.8} />
+            </div>
+            <span className="font-medium" style={{ color: tab.active ? t.primary : t.onSurfaceVariant, fontSize: '11px' }}>
               {tab.label}
             </span>
           </div>
@@ -172,12 +83,12 @@ function BottomNavBar({ c, activeTab = 'search' }: { c: C, activeTab?: string })
   )
 }
 
-function UploadIconZone({ icon, size, borderRadius, onUpload, gradient = 'from-blue-500 to-purple-600' }: {
+function UploadIconZone({ icon, size, borderRadius, gradient = 'from-pink-500 via-purple-500 to-indigo-500', onUpload }: {
   icon: string | null
   size: number
   borderRadius: string
-  onUpload?: (dataUrl: string) => void
   gradient?: string
+  onUpload?: (dataUrl: string) => void
 }) {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -205,7 +116,7 @@ function UploadIconZone({ icon, size, borderRadius, onUpload, gradient = 'from-b
         : <div className={`w-full h-full bg-gradient-to-br ${gradient}`} />}
       {onUpload && !icon && (
         <div className="absolute inset-0 flex items-end justify-center pb-1.5">
-          <span className="text-[7px] text-white/70 bg-black/30 px-1.5 py-0.5 rounded-full">tap to upload</span>
+          <span className="text-[9px] text-white/85 bg-black/30 px-1.5 py-0.5 rounded-full">tap to upload</span>
         </div>
       )}
       {onUpload && (
@@ -216,9 +127,15 @@ function UploadIconZone({ icon, size, borderRadius, onUpload, gradient = 'from-b
   )
 }
 
-function UploadScreenshotSlot({ src, index, height, width, borderRadius, c, onUpload }: {
-  src?: string, index: number, height: number, width: number,
-  borderRadius: string, c: C, onUpload?: (i: number, d: string) => void
+function UploadScreenshotSlot({ src, index, height, width, borderRadius, t, onUpload, isLandscape }: {
+  src?: string
+  index: number
+  height: number
+  width: number
+  borderRadius: string
+  t: AndroidTokens
+  onUpload?: (index: number, dataUrl: string) => void
+  isLandscape?: boolean
 }) {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -231,7 +148,13 @@ function UploadScreenshotSlot({ src, index, height, width, borderRadius, c, onUp
   return (
     <div
       className="flex-shrink-0 relative overflow-hidden"
-      style={{ width, height, borderRadius, background: src ? 'transparent' : c.surface2, cursor: onUpload ? 'pointer' : 'default' }}
+      style={{
+        width: isLandscape ? height : width,
+        height: isLandscape ? width : height,
+        borderRadius,
+        background: src ? 'transparent' : t.surfaceContainer,
+        cursor: onUpload ? 'pointer' : 'default',
+      }}
       onClick={() => onUpload && inputRef.current?.click()}
       onDragOver={e => { if (onUpload) e.preventDefault() }}
       onDrop={e => {
@@ -245,8 +168,14 @@ function UploadScreenshotSlot({ src, index, height, width, borderRadius, c, onUp
         ? <img src={src} alt="" className="w-full h-full object-cover" />
         : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-1">
-            {onUpload && <svg viewBox="0 0 24 24" className="w-4 h-4" style={{ fill: c.sub }}><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" /></svg>}
-            <span className="text-[7px] text-center" style={{ color: c.sub }}>{onUpload ? 'Add' : `SS ${index + 1}`}</span>
+            {onUpload && (
+              <svg viewBox="0 0 24 24" className="w-5 h-5" style={{ fill: t.onSurfaceVariant }}>
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+              </svg>
+            )}
+            <span className="text-[10px] text-center px-1" style={{ color: t.onSurfaceVariant }}>
+              {onUpload ? 'Add' : `${index + 1}`}
+            </span>
           </div>
         )}
       {onUpload && (
@@ -262,387 +191,328 @@ const GP_COMPETITORS = [
     renderIcon: () => (
       <svg viewBox="0 0 60 60" className="w-full h-full">
         <rect width="60" height="60" rx="14" fill="#58CC02"/>
-        <circle cx="30" cy="28" r="16" fill="white"/>
-        <circle cx="24" cy="25" r="3.5" fill="#1CB0F6"/>
-        <circle cx="36" cy="25" r="3.5" fill="#1CB0F6"/>
-        <circle cx="24" cy="25" r="2" fill="#1C1C1E"/>
-        <circle cx="36" cy="25" r="2" fill="#1C1C1E"/>
-        <path d="M26 31 Q30 35 34 31" stroke="#FF9600" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-        <path d="M18 19 L22 25 L14 25 Z" fill="white"/>
-        <path d="M42 19 L46 25 L38 25 Z" fill="white"/>
+        <circle cx="30" cy="28" r="14" fill="white"/>
+        <circle cx="25" cy="24" r="3" fill="#1CB0F6"/>
+        <circle cx="35" cy="24" r="3" fill="#1CB0F6"/>
+        <circle cx="25" cy="24" r="1.5" fill="#000"/>
+        <circle cx="35" cy="24" r="1.5" fill="#000"/>
+        <ellipse cx="30" cy="34" rx="5" ry="3" fill="#FFB833"/>
       </svg>
     ),
-    name: 'Duolingo: Language Lessons', developer: 'Duolingo',
-    category: 'Education', tagline: 'Learn a new language for free',
-    rating: 4.7, size: '68 MB', downloads: '500M+', prefix: 'gpc1',
+    name: 'Duolingo: Language Lessons',
+    devCategory: 'Duolingo · Education',
+    tagline: 'Learn a new language for free',
+    rating: 4.7, size: '68 MB', downloads: '500M+',
   },
   {
     renderIcon: () => (
       <svg viewBox="0 0 60 60" className="w-full h-full">
-        <rect width="60" height="60" rx="14" fill="#191414"/>
-        <circle cx="30" cy="30" r="18" fill="#1DB954"/>
-        <path d="M18 24 Q30 20 42 24" stroke="#191414" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
-        <path d="M20 30 Q30 26 40 30" stroke="#191414" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
-        <path d="M22 36 Q30 32 38 36" stroke="#191414" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+        <rect width="60" height="60" rx="14" fill="#000000"/>
+        <g fill="#1ED760">
+          <rect x="14" y="20" width="3" height="20" rx="1"/>
+          <rect x="20" y="14" width="3" height="32" rx="1"/>
+          <rect x="26" y="18" width="3" height="24" rx="1"/>
+          <rect x="32" y="12" width="3" height="36" rx="1"/>
+          <rect x="38" y="22" width="3" height="16" rx="1"/>
+          <rect x="44" y="16" width="3" height="28" rx="1"/>
+        </g>
       </svg>
     ),
-    name: 'Spotify: Music & Podcasts', developer: 'Spotify AB',
-    category: 'Music & Audio', tagline: 'Your AI Dance Video Awaits',
-    rating: 4.3, size: '32 MB', downloads: '1B+', prefix: 'gpc2',
-  },
-  {
-    renderIcon: () => (
-      <svg viewBox="0 0 60 60" className="w-full h-full">
-        <rect width="60" height="60" rx="14" fill="#7D2AE8"/>
-        <path d="M40 20 Q28 10 19 20 Q10 30 19 40 Q28 50 40 40" stroke="white" strokeWidth="7" strokeLinecap="round" fill="none"/>
-      </svg>
-    ),
-    name: 'Canva: Design & AI Editor', developer: 'Canva',
-    category: 'Art & Design', tagline: 'Photo, Video & Graphic Design',
-    rating: 4.8, size: '29 MB', downloads: '500M+', prefix: 'gpc3',
+    name: 'Spotify: Music & Podcasts',
+    devCategory: 'Spotify AB · Music & Audio',
+    tagline: 'Your AI Dance Video Awaits',
+    rating: 4.5, size: '52 MB', downloads: '1B+',
   },
 ]
 
-function SearchView({ data, c, onUploadIcon, onUploadScreenshot }: {
-  data: AppData, c: C, onUploadIcon?: (d: string) => void, onUploadScreenshot?: (i: number, d: string) => void
-}) {
-  const price = formatPrice(data.price)
-  const rating = formatRating(data.rating)
-  const reviews = formatReviews(data.reviewCount)
-
-  // User app screenshots
-  const maxShots = 10
-  const userSlots = Math.min(
-    Math.max(data.screenshots.length + (onUploadScreenshot && data.screenshots.length < maxShots ? 1 : 0), 3),
-    maxShots
-  )
-
+function FilterChip({ label, active, dropdown, t }: { label: string, active?: boolean, dropdown?: boolean, t: AndroidTokens }) {
   return (
-    <div className="h-full flex flex-col" style={{ background: c.bg }}>
-      <StatusBar c={c} />
+    <button
+      className="flex-shrink-0 flex items-center gap-1 px-3 rounded-lg whitespace-nowrap"
+      style={{
+        background: active ? t.primaryContainer : 'transparent',
+        border: active ? 'none' : `1px solid ${t.outline}`,
+        color: active ? t.onPrimaryContainer : t.onSurface,
+        fontSize: '13px',
+        height: '32px',
+        fontWeight: 500,
+      }}>
+      {label}
+      {dropdown && <ChevronDown className="w-3.5 h-3.5" strokeWidth={2}/>}
+    </button>
+  )
+}
 
-      {/* Top bar: back + title + search + mic — sticky */}
-      <div className="flex-shrink-0 flex items-center gap-2 px-3 pb-2" style={{ background: c.bg }}>
-        <button style={{ color: c.text }}>
-          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-          </svg>
-        </button>
-        <span className="flex-1 font-bold text-[16px]" style={{ color: c.text }}>Animation apps</span>
-        <button style={{ color: c.text }}>
-          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-            <path d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
-          </svg>
-        </button>
-        <button style={{ color: c.text }}>
-          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1 1.93c-3.94-.49-7-3.85-7-7.93h2c0 3.31 2.69 6 6 6s6-2.69 6-6h2c0 4.08-3.06 7.44-7 7.93V19h3v2H9v-2h3v-3.07z"/>
-          </svg>
-        </button>
+function SearchListRow({
+  renderIcon, name, devCategory, tagline, rating, size, downloads, t,
+}: {
+  renderIcon: () => React.ReactNode
+  name: string
+  devCategory: string
+  tagline?: string
+  rating: number
+  size: string
+  downloads: string
+  t: AndroidTokens
+}) {
+  return (
+    <div className="flex items-start gap-3 px-4 py-3">
+      <div className="flex-shrink-0 overflow-hidden" style={{ width: 56, height: 56, borderRadius: '14px' }}>
+        {renderIcon()}
       </div>
-
-      {/* Filter chips sticky */}
-      <div className="flex-shrink-0 flex gap-2 px-3 pb-2 overflow-x-auto [&::-webkit-scrollbar]:hidden"
-        style={{ background: c.bg }}>
-        {[
-          { label: 'Rating ✓', active: true },
-          { label: 'Family', active: false },
-          { label: 'Premium', active: false },
-          { label: 'New', active: false },
-        ].map(chip => (
-          <div key={chip.label}
-            className="flex-shrink-0 flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-medium whitespace-nowrap"
-            style={{
-              border: `1px solid ${chip.active ? c.primary : c.outline}`,
-              color: chip.active ? c.primary : c.sub,
-              background: chip.active ? c.chipActive : 'transparent',
-            }}>
-            {chip.label}
+      <div className="flex-1 min-w-0">
+        <p className="font-medium leading-tight" style={{ color: t.onSurface, fontSize: '15px' }}>{name}</p>
+        <p className="mt-0.5 line-clamp-1" style={{ color: t.onSurfaceVariant, fontSize: '12px' }}>{devCategory}</p>
+        {tagline && <p className="mt-0.5 italic line-clamp-1" style={{ color: t.onSurfaceVariant, fontSize: '12px' }}>{tagline}</p>}
+        <div className="flex items-center gap-2.5 mt-1.5">
+          <div className="flex items-center gap-0.5">
+            <span style={{ color: t.onSurface, fontSize: '12px' }}>{rating.toFixed(1)}</span>
+            <Star className="w-2.5 h-2.5" style={{ fill: t.primary, color: t.primary }} />
           </div>
-        ))}
-      </div>
-
-      {/* Sponsored label */}
-      <div className="flex-shrink-0 flex items-center justify-between px-4 pb-1" style={{ background: c.bg }}>
-        <span className="text-[10px]" style={{ color: c.sub }}>Sponsored</span>
-        <button style={{ color: c.sub }}>
-          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
-            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-          </svg>
-        </button>
-      </div>
-
-      {/* Scrollable list */}
-      <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden">
-        {/* User app item */}
-        <div style={{ borderBottom: `0.5px solid ${c.divider}` }}>
-          {/* List row */}
-          <div className="flex items-center gap-3 px-4 py-3">
-            <UploadIconZone
-              icon={data.iconDataUrl || null}
-              size={80}
-              borderRadius="14px"
-              onUpload={onUploadIcon}
-            />
-            <div className="flex-1 min-w-0">
-              <p className="font-bold text-[15px] line-clamp-1" style={{ color: c.text }}>
-                {data.appName || 'App Name'}
-              </p>
-              <p className="text-[12px] mt-0.5 line-clamp-1" style={{ color: c.sub }}>
-                {data.developerName || 'Developer'} • {data.category || 'App'}
-              </p>
-              <p className="text-[12px] mt-0.5 italic line-clamp-1" style={{ color: c.sub }}>
-                {data.subtitle || 'App Subtitle'}
-              </p>
-              <div className="flex items-center gap-1 mt-0.5">
-                <span className="text-[11px]" style={{ color: c.sub }}>{rating}★</span>
-                <span className="text-[10px]" style={{ color: c.sub }}>·</span>
-                <span className="text-[10px]" style={{ color: c.sub }}>App</span>
-                <span className="text-[10px]" style={{ color: c.sub }}>·</span>
-                <span className="text-[10px]" style={{ color: c.sub }}>↓{formatReviews(data.reviewCount)}+</span>
-              </div>
-            </div>
+          <span style={{ color: t.onSurfaceVariant, fontSize: '12px' }}>{size}</span>
+          <div className="flex items-center gap-0.5">
+            <Download className="w-2.5 h-2.5" style={{ color: t.primary }} strokeWidth={2.5}/>
+            <span style={{ color: t.onSurfaceVariant, fontSize: '12px' }}>{downloads}</span>
           </div>
-          {/* Screenshots row for user app */}
-          <DragScrollX className="px-4 pb-3 gap-2">
-            {Array.from({ length: userSlots }).map((_, i) => (
-              <UploadScreenshotSlot
-                key={i}
-                src={data.screenshots[i]}
-                index={i}
-                height={120}
-                width={data.screenshots[i] ? 90 : 80}
-                borderRadius="8px"
-                c={c}
-                onUpload={onUploadScreenshot}
-              />
-            ))}
-          </DragScrollX>
         </div>
-
-        {/* Competitor items */}
-        {GP_COMPETITORS.map((comp, idx) => (
-          <div key={idx} style={{ borderBottom: `0.5px solid ${c.divider}` }}>
-            <div className="flex items-center gap-3 px-4 py-3">
-              <div className="w-[80px] h-[80px] flex-shrink-0 overflow-hidden" style={{ borderRadius: '14px' }}>
-                {comp.renderIcon()}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-bold text-[15px] line-clamp-1" style={{ color: c.text }}>{comp.name}</p>
-                <p className="text-[12px] mt-0.5 line-clamp-1" style={{ color: c.sub }}>
-                  {comp.developer} • {comp.category}
-                </p>
-                <p className="text-[12px] mt-0.5 italic line-clamp-1" style={{ color: c.sub }}>{comp.tagline}</p>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <span className="text-[11px]" style={{ color: c.sub }}>{formatRating(comp.rating)}★</span>
-                  <span className="text-[10px]" style={{ color: c.sub }}>·</span>
-                  <span className="text-[10px]" style={{ color: c.sub }}>{comp.size}</span>
-                  <span className="text-[10px]" style={{ color: c.sub }}>·</span>
-                  <span className="text-[10px]" style={{ color: c.sub }}>↓{comp.downloads}</span>
-                </div>
-              </div>
-            </div>
-            {/* Placeholder screenshot strips for competitors */}
-            <div className="flex gap-2 px-4 pb-3">
-              {[0, 1, 2].map(i => (
-                <div key={i} className="flex-shrink-0 rounded-[8px]"
-                  style={{ width: 80, height: 120, background: c.surface2 }} />
-              ))}
-            </div>
-          </div>
-        ))}
-
-        <div className="h-2" />
       </div>
-
-      <BottomNavBar c={c} activeTab="search" />
+      <button className="w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0"
+        style={{ background: t.surfaceContainer }}>
+        <ChevronDown className="w-4 h-4" style={{ color: t.onSurfaceVariant }} />
+      </button>
     </div>
   )
 }
 
-function DetailView({ data, c, onUploadIcon, onUploadScreenshot }: {
-  data: AppData, c: C, onUploadIcon?: (d: string) => void, onUploadScreenshot?: (i: number, d: string) => void
+function UserAppSearchRow({ data, t, onUploadIcon }: {
+  data: AppData, t: AndroidTokens, onUploadIcon?: (dataUrl: string) => void
+}) {
+  const rating = data.rating.toFixed(1)
+  const reviews = formatReviews(data.reviewCount)
+  return (
+    <div className="flex items-start gap-3 px-4 py-3">
+      <UploadIconZone icon={data.iconDataUrl || null} size={56} borderRadius="14px" onUpload={onUploadIcon} />
+      <div className="flex-1 min-w-0">
+        <p className="font-medium leading-tight" style={{ color: t.onSurface, fontSize: '15px' }}>{data.appName || 'App Name'}</p>
+        <p className="mt-0.5 line-clamp-1" style={{ color: t.onSurfaceVariant, fontSize: '12px' }}>
+          {data.developerName || 'Developer'} · {data.category || 'Utilities'}
+        </p>
+        <p className="mt-0.5 italic line-clamp-1" style={{ color: t.onSurfaceVariant, fontSize: '12px' }}>{data.subtitle || 'App Subtitle'}</p>
+        <div className="flex items-center gap-2.5 mt-1.5">
+          <div className="flex items-center gap-0.5">
+            <span style={{ color: t.onSurface, fontSize: '12px' }}>{rating}</span>
+            <Star className="w-2.5 h-2.5" style={{ fill: t.primary, color: t.primary }} />
+          </div>
+          <span style={{ color: t.onSurfaceVariant, fontSize: '12px' }}>{reviews}</span>
+          <span style={{ color: t.onSurfaceVariant, fontSize: '12px' }}>{data.category || 'Utilities'}</span>
+        </div>
+      </div>
+      <button className="w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0"
+        style={{ background: t.surfaceContainer }}>
+        <ChevronDown className="w-4 h-4" style={{ color: t.onSurfaceVariant }} />
+      </button>
+    </div>
+  )
+}
+
+function SearchView({ data, t, onUploadIcon }: {
+  data: AppData, t: AndroidTokens, onUploadIcon?: (d: string) => void
+}) {
+  return (
+    <div className="h-full flex flex-col" style={{ background: t.surface, fontFamily: 'var(--font-android), Roboto, sans-serif' }}>
+      <StatusBar t={t} />
+
+      {/* Title bar */}
+      <div className="flex-shrink-0 flex items-center gap-3 px-3 py-2" style={{ background: t.surface }}>
+        <button className="w-10 h-10 flex items-center justify-center rounded-full">
+          <ArrowLeft className="w-5 h-5" style={{ color: t.onSurface }} strokeWidth={2}/>
+        </button>
+        <span className="flex-1" style={{ color: t.onSurface, fontSize: '18px', fontWeight: 400 }}>Animation apps</span>
+        <button className="w-10 h-10 flex items-center justify-center rounded-full">
+          <Search className="w-5 h-5" style={{ color: t.onSurface }} strokeWidth={2}/>
+        </button>
+        <button className="w-10 h-10 flex items-center justify-center rounded-full">
+          <Mic className="w-5 h-5" style={{ color: t.onSurface }} strokeWidth={2}/>
+        </button>
+      </div>
+
+      {/* Filter chips */}
+      <div className="flex-shrink-0 flex gap-2 px-3 pb-2 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+        style={{ background: t.surface }}>
+        <FilterChip label="Rating" t={t} dropdown />
+        <FilterChip label="Family" t={t} />
+        <FilterChip label="Premium" t={t} />
+        <FilterChip label="New" t={t} />
+        <FilterChip label="Editor" t={t} />
+      </div>
+
+      {/* Sponsored header */}
+      <div className="flex items-center justify-between px-4 pt-3 pb-1" style={{ background: t.surface }}>
+        <span className="font-semibold" style={{ color: t.onSurfaceVariant, fontSize: '12px' }}>Sponsored</span>
+        <MoreVertical className="w-4 h-4" style={{ color: t.onSurfaceVariant }} />
+      </div>
+
+      {/* Scrollable list */}
+      <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+        <UserAppSearchRow data={data} t={t} onUploadIcon={onUploadIcon} />
+        <div style={{ height: '0.5px', background: t.outlineVariant, margin: '0 16px' }} />
+        {GP_COMPETITORS.map((comp, idx) => (
+          <SearchListRow
+            key={idx}
+            renderIcon={comp.renderIcon}
+            name={comp.name}
+            devCategory={comp.devCategory}
+            tagline={comp.tagline}
+            rating={comp.rating}
+            size={comp.size}
+            downloads={comp.downloads}
+            t={t}
+          />
+        ))}
+        <div className="h-2" />
+      </div>
+
+      <BottomNav t={t} />
+    </div>
+  )
+}
+
+function DetailView({ data, t, onUploadIcon, onUploadScreenshot }: {
+  data: AppData, t: AndroidTokens, onUploadIcon?: (d: string) => void, onUploadScreenshot?: (i: number, d: string) => void
 }) {
   const price = formatPrice(data.price)
-  const rating = formatRating(data.rating)
   const reviews = formatReviews(data.reviewCount)
+  const rating = data.rating.toFixed(1)
+  const btn = price === 'Free' ? 'Install' : price
 
   const maxShots = 10
   const slots = Math.min(Math.max(data.screenshots.length + (onUploadScreenshot && data.screenshots.length < maxShots ? 1 : 0), 3), maxShots)
 
   return (
-    <div className="h-full flex flex-col" style={{ background: c.bg }}>
-      <StatusBar c={c} />
+    <div className="h-full flex flex-col" style={{ background: t.surface, fontFamily: 'var(--font-android), Roboto, sans-serif' }}>
+      <StatusBar t={t} />
 
-      {/* Top app bar */}
-      <div className="flex-shrink-0 flex items-center px-2 pb-2 gap-1" style={{ background: c.bg }}>
-        <button className="p-2 rounded-full" style={{ color: c.text }}>
-          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-          </svg>
+      {/* Top nav */}
+      <div className="flex-shrink-0 flex items-center justify-between px-2 py-1" style={{ background: t.surface }}>
+        <button className="w-10 h-10 flex items-center justify-center rounded-full">
+          <ArrowLeft className="w-5 h-5" style={{ color: t.onSurface }} strokeWidth={2}/>
         </button>
-        <div className="flex-1" />
-        <button className="p-2 rounded-full" style={{ color: c.text }}>
-          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
-            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-          </svg>
+        <button className="w-10 h-10 flex items-center justify-center rounded-full">
+          <MoreVertical className="w-5 h-5" style={{ color: t.onSurface }} strokeWidth={2}/>
         </button>
       </div>
 
-      {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {/* App header */}
-        <div className="px-4 pb-3 flex gap-4">
-          <UploadIconZone
-            icon={data.iconDataUrl || null}
-            size={88}
-            borderRadius="18px"
-            onUpload={onUploadIcon}
-          />
-          <div className="flex-1 min-w-0 pt-0.5">
-            <h1 className="font-bold leading-snug" style={{ color: c.text, fontSize: '18px' }}>
+        <div className="px-4 pb-4 flex gap-4" style={{ background: t.surface }}>
+          <UploadIconZone icon={data.iconDataUrl || null} size={72} borderRadius="16px" onUpload={onUploadIcon} />
+          <div className="flex-1 min-w-0 flex flex-col justify-center">
+            <h1 className="font-medium leading-tight" style={{ color: t.onSurface, fontSize: '22px' }}>
               {data.appName || 'App Name'}
             </h1>
-            <p className="text-[13px] mt-1 font-medium" style={{ color: c.primaryText }}>
+            <p className="mt-1 font-medium line-clamp-1" style={{ color: t.primary, fontSize: '14px' }}>
               {data.developerName || 'Developer'}
             </p>
-            {(data.hasInAppPurchases) && (
-              <p className="text-[12px] mt-0.5" style={{ color: c.sub }}>
-                Contains ads · In-app purchases
-              </p>
+            {data.hasInAppPurchases && (
+              <p className="mt-0.5" style={{ color: t.onSurfaceVariant, fontSize: '12px' }}>Contains ads · In-app purchases</p>
             )}
-            <div className="flex items-center gap-1 mt-0.5">
-              <span className="text-[12px]" style={{ color: c.sub }}>{rating} ★</span>
-              <span className="text-[11px]" style={{ color: c.sub }}>{reviews} reviews</span>
-            </div>
           </div>
         </div>
 
-        {/* Info badges row */}
-        <div className="flex mx-4 mb-3 rounded-xl overflow-hidden" style={{ border: `1px solid ${c.outline}` }}>
+        {/* Badges row */}
+        <div className="flex items-center px-4 pb-3" style={{ background: t.surface }}>
           {([
-            { top: `${rating}★`, sub: `${reviews} reviews`, icon: 'ⓘ' },
-            { top: '3+', sub: 'Rated for 3+', icon: '' },
-            { top: '↓', sub: '96 MB', icon: '' },
-          ] as { top: string, sub: string, icon: string }[]).map((item, idx, arr) => (
-            <div key={idx} className="flex-1 flex flex-col items-center py-2 px-1 text-center"
-              style={{ borderRight: idx < arr.length - 1 ? `1px solid ${c.outline}` : 'none' }}>
-              <div className="text-[13px] font-bold" style={{ color: c.text }}>{item.top}</div>
-              <div className="text-[9px] mt-0.5" style={{ color: c.sub }}>{item.sub}</div>
+            {
+              big: <div className="flex items-center gap-1">
+                <span className="font-semibold" style={{ color: t.onSurface, fontSize: '15px' }}>{rating}</span>
+                <Star className="w-3 h-3" style={{ fill: t.onSurface, color: t.onSurface }} />
+              </div>,
+              sub: `${reviews} reviews`,
+            },
+            {
+              big: <div className="rounded border px-1.5 font-semibold" style={{ borderColor: t.outline, color: t.onSurface, fontSize: '11px', lineHeight: '14px' }}>3+</div>,
+              sub: 'Rated for 3+',
+            },
+            {
+              big: <Download className="w-4 h-4" style={{ color: t.onSurface }} strokeWidth={2}/>,
+              sub: '96 MB',
+            },
+            {
+              big: <span className="font-semibold" style={{ color: t.onSurface, fontSize: '15px' }}>{data.reviewCount > 0 ? formatReviews(Math.round(data.reviewCount * 100)) : '10M+'}</span>,
+              sub: 'Downloads',
+            },
+          ] as { big: React.ReactNode, sub: string }[]).map((item, idx, arr) => (
+            <div key={idx} className="flex-1 flex flex-col items-center gap-1"
+              style={{ borderRight: idx < arr.length - 1 ? `1px solid ${t.outlineVariant}` : 'none' }}>
+              <div className="flex items-center justify-center" style={{ minHeight: '20px' }}>{item.big}</div>
+              <span style={{ color: t.onSurfaceVariant, fontSize: '11px' }}>{item.sub}</span>
             </div>
           ))}
         </div>
 
         {/* Install button */}
-        <div className="px-4 pb-3">
-          <button className="w-full py-3 rounded-lg text-[15px] font-medium"
-            style={{ background: '#1A73E8', color: '#ffffff' }}>
-            {price === 'Free' ? 'Install' : price}
+        <div className="px-4 pb-4" style={{ background: t.surface }}>
+          <button
+            className="w-full rounded-lg font-medium"
+            style={{ background: t.primary, color: t.onPrimary, height: '40px', fontSize: '15px' }}>
+            {btn}
           </button>
         </div>
 
-        {/* Screenshots */}
-        <div style={{ height: '0.5px', background: c.divider }} />
-        <div className="py-3">
+        {/* Screenshots — landscape */}
+        <div className="pb-4" style={{ background: t.surface }}>
           <DragScrollX className="px-4 gap-3">
             {Array.from({ length: slots }).map((_, i) => (
               <UploadScreenshotSlot
                 key={i}
                 src={data.screenshots[i]}
                 index={i}
-                height={120}
-                width={data.screenshots[i] ? 200 : 180}
+                height={200}
+                width={120}
                 borderRadius="8px"
-                c={c}
+                t={t}
                 onUpload={onUploadScreenshot}
               />
             ))}
           </DragScrollX>
         </div>
 
-        {/* About section */}
-        <div style={{ height: '0.5px', background: c.divider }} />
-        <div className="px-4 py-3">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-[14px] font-medium" style={{ color: c.text }}>About this app</h2>
-            <svg viewBox="0 0 24 24" className="w-4 h-4" style={{ fill: c.primaryText }}>
-              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-            </svg>
-          </div>
-          <p className="text-[12px] leading-relaxed line-clamp-3" style={{ color: c.sub }}>
-            {data.subtitle || 'Short description of your app. Up to 80 characters appear here in search results.'}
+        {/* About this app */}
+        <div className="px-4 py-3 flex items-center justify-between" style={{ background: t.surface }}>
+          <h2 className="font-medium" style={{ color: t.onSurface, fontSize: '20px' }}>About this app</h2>
+          <button className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: t.surfaceContainer }}>
+            <ChevronRight className="w-5 h-5" style={{ color: t.onSurface }} />
+          </button>
+        </div>
+
+        <div className="px-4 pb-3" style={{ background: t.surface }}>
+          <p className="leading-relaxed line-clamp-3" style={{ color: t.onSurface, fontSize: '14px' }}>
+            {data.subtitle || 'Make your own Animations, Video and Photo Edits, Visual Effects, and more!'}
           </p>
-          <button className="text-[12px] mt-1 font-medium" style={{ color: c.primaryText }}>read more</button>
         </div>
 
-        {/* Ratings section */}
-        <div style={{ height: '8px', background: c.surface1 }} />
-        <div className="px-4 py-3">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-[14px] font-medium" style={{ color: c.text }}>Ratings and reviews</h2>
-            <svg viewBox="0 0 24 24" className="w-4 h-4" style={{ fill: c.primaryText }}>
-              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-            </svg>
+        {/* Top badge + category chip */}
+        <div className="px-4 pb-3 flex flex-wrap gap-2" style={{ background: t.surface }}>
+          <div className="px-3 py-1.5 rounded-full" style={{ border: `1px solid ${t.outline}`, color: t.onSurface, fontSize: '13px' }}>
+            #8 top grossing in {data.category?.toLowerCase() || 'video players'}
           </div>
-          <div className="flex items-end gap-3">
-            <div className="text-center">
-              <div className="text-[40px] font-light leading-none" style={{ color: c.text }}>{rating}</div>
-              <Stars rating={data.rating} c={c} size={10} prefix="gpdt" />
-              <div className="text-[9px] mt-0.5" style={{ color: c.sub }}>{reviews} reviews</div>
-            </div>
-            <div className="flex-1">
-              {[5, 4, 3, 2, 1].map(star => {
-                const pct = star === 5 ? 80 : star === 4 ? 12 : star === 3 ? 4 : 2
-                return (
-                  <div key={star} className="flex items-center gap-1.5 mb-0.5">
-                    <span className="text-[8px] w-2 text-right" style={{ color: c.sub }}>{star}</span>
-                    <div className="flex-1 rounded-full h-[3px] overflow-hidden" style={{ background: c.divider }}>
-                      <div className="h-full rounded-full" style={{ width: `${pct}%`, background: c.primary }} />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+          <div className="px-3 py-1.5 rounded-full" style={{ border: `1px solid ${t.outline}`, color: t.onSurface, fontSize: '13px' }}>
+            {data.category || 'Editor'}
           </div>
         </div>
 
-        {/* Similar apps */}
-        <div style={{ height: '8px', background: c.surface1 }} />
-        <div className="px-4 py-3">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-[14px] font-medium" style={{ color: c.text }}>Similar apps</h2>
-            <svg viewBox="0 0 24 24" className="w-4 h-4" style={{ fill: c.primaryText }}>
-              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
-            </svg>
-          </div>
-          <div className="grid grid-cols-3 gap-3">
-            {GP_COMPETITORS.map((comp, idx) => (
-              <div key={idx} className="flex flex-col items-center gap-1">
-                <div className="w-[60px] h-[60px] overflow-hidden" style={{ borderRadius: '14px' }}>
-                  {comp.renderIcon()}
-                </div>
-                <span className="text-[9px] text-center line-clamp-2 leading-tight" style={{ color: c.text }}>
-                  {comp.name.split(':')[0]}
-                </span>
-                <div className="flex items-center gap-0.5">
-                  <span className="text-[8px]" style={{ color: c.sub }}>{formatRating(comp.rating)}★</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="h-4" />
+        <div className="h-6" />
       </div>
 
-      <BottomNavBar c={c} activeTab="search" />
+      <BottomNav t={t} />
     </div>
   )
 }
 
-export function GooglePlayPreview({ data, dark = false, mode = 'detail', onUploadIcon, onUploadScreenshot }: Props) {
-  const c = colors(dark)
+export function GooglePlayPreview({ data, dark = false, mode = 'search', onUploadIcon, onUploadScreenshot }: Props) {
+  const theme: Theme = dark ? 'dark' : 'light'
+  const t = androidTokens(theme)
   return mode === 'search'
-    ? <SearchView data={data} c={c} onUploadIcon={onUploadIcon} onUploadScreenshot={onUploadScreenshot} />
-    : <DetailView data={data} c={c} onUploadIcon={onUploadIcon} onUploadScreenshot={onUploadScreenshot} />
+    ? <SearchView data={data} t={t} onUploadIcon={onUploadIcon} />
+    : <DetailView data={data} t={t} onUploadIcon={onUploadIcon} onUploadScreenshot={onUploadScreenshot} />
 }

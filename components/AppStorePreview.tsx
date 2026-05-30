@@ -1,54 +1,13 @@
 import { useRef } from 'react'
+import { ChevronLeft, Share, X, Search, User, Grid3X3 } from 'lucide-react'
 import { AppData, PreviewMode, UploadHandlers } from '@/lib/types'
 import { formatReviews, formatRating, formatPrice } from '@/lib/formatters'
+import { iosTokens, IOSTokens, Theme } from '@/lib/iosTokens'
 
 interface Props extends UploadHandlers {
   data: AppData
   dark?: boolean
   mode?: PreviewMode
-}
-
-type C = {
-  bg: string
-  card: string
-  text: string
-  sub: string
-  sep: string
-  searchBg: string
-  searchText: string
-  btnBg: string
-  starEmpty: string
-  border: string
-  tabBar: string
-}
-
-function colors(dark: boolean): C {
-  if (dark) return {
-    bg: '#000000',
-    card: '#1c1c1e',
-    text: '#ffffff',
-    sub: 'rgba(235,235,245,0.6)',
-    sep: '#38383a',
-    searchBg: '#1c1c1e',
-    searchText: '#636366',
-    btnBg: 'rgba(0,122,255,0.18)',
-    starEmpty: '#3a3a3c',
-    border: '#38383a',
-    tabBar: '#1c1c1e',
-  }
-  return {
-    bg: '#ffffff',
-    card: '#EEF3FB',
-    text: '#1c1c1e',
-    sub: '#8e8e93',
-    sep: '#c7c7cc',
-    searchBg: '#EEEEF0',
-    searchText: '#8e8e93',
-    btnBg: '#E5F0FF',
-    starEmpty: '#D1D5DB',
-    border: '#e5e5ea',
-    tabBar: 'rgba(249,249,249,0.94)',
-  }
 }
 
 function Stars({ rating, size = 10, emptyColor, prefix }: {
@@ -97,27 +56,24 @@ function DragScrollX({ children, className }: { children: React.ReactNode, class
   )
 }
 
-function StatusBar({ c }: { c: C }) {
+function StatusBar({ t }: { t: IOSTokens }) {
   return (
-    <div className="flex justify-between items-center flex-shrink-0"
-      style={{ color: c.text, height: '38px', padding: '0 22px' }}>
-      <span style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '-0.2px' }}>9:41</span>
+    <div className="flex justify-between items-center flex-shrink-0 relative z-10"
+      style={{ color: t.label, height: '48px', padding: '0 28px' }}>
+      <span style={{ fontSize: '15px', fontWeight: 600, letterSpacing: '-0.3px' }}>9:41</span>
       <div className="flex items-center gap-[5px]">
-        {/* Signal bars */}
-        <svg viewBox="0 0 18 12" width="14" height="10" className="fill-current">
+        <svg viewBox="0 0 18 12" width="17" height="11" className="fill-current">
           <rect x="0" y="8" width="3" height="4" rx="0.5"/>
           <rect x="4" y="6" width="3" height="6" rx="0.5"/>
           <rect x="8" y="3" width="3" height="9" rx="0.5"/>
           <rect x="12" y="0" width="3" height="12" rx="0.5"/>
         </svg>
-        {/* WiFi */}
-        <svg viewBox="0 0 16 12" width="13" height="10" className="fill-current">
+        <svg viewBox="0 0 16 12" width="15" height="11" className="fill-current">
           <path d="M8 11.5l1.5-1.5c-.83-.83-2.17-.83-3 0L8 11.5zm-3-3l1.5 1.5c.83-.83 2.17-.83 3 0L11 8.5c-1.66-1.66-4.34-1.66-6 0zM2 5.5l1.5 1.5c2.5-2.5 6.5-2.5 9 0L14 5.5C10.69 2.19 5.31 2.19 2 5.5z"/>
         </svg>
-        {/* Battery */}
-        <svg viewBox="0 0 26 12" width="22" height="10">
-          <rect x="0.5" y="0.5" width="22" height="11" rx="3" ry="3" fill="none" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1"/>
-          <rect x="2" y="2" width="19" height="8" rx="1.5" ry="1.5" fill="currentColor"/>
+        <svg viewBox="0 0 26 12" width="26" height="11">
+          <rect x="0.5" y="0.5" width="22" height="11" rx="3" fill="none" stroke="currentColor" strokeOpacity="0.4"/>
+          <rect x="2" y="2" width="19" height="8" rx="1.5" fill="currentColor"/>
           <rect x="23.5" y="4" width="1.5" height="4" rx="0.5" fill="currentColor" fillOpacity="0.4"/>
         </svg>
       </div>
@@ -143,17 +99,17 @@ const AS_TABS = [
     active: true },
 ]
 
-function BottomTabBar({ c }: { c: C }) {
+function BottomTabBar({ t }: { t: IOSTokens }) {
   return (
-    <div className="flex-shrink-0 flex justify-around items-center py-1.5 pb-4 border-t-[0.5px]"
-      style={{ background: c.tabBar, borderColor: c.border }}>
+    <div className="flex-shrink-0 flex justify-around items-start pt-1.5 pb-5 border-t-[0.5px]"
+      style={{ background: t.tabBarBg, borderColor: t.hairline, backdropFilter: 'blur(20px)' }}>
       {AS_TABS.map(tab => (
-        <div key={tab.label} className="flex flex-col items-center gap-[2px] min-w-0 px-1">
-          <svg viewBox="0 0 24 24" width="22" height="22"
-            style={{ fill: tab.active ? '#007AFF' : c.sub }}>
+        <div key={tab.label} className="flex flex-col items-center gap-[1px] min-w-0 px-1">
+          <svg viewBox="0 0 24 24" width="26" height="26"
+            style={{ fill: tab.active ? t.systemBlue : t.secondaryLabel }}>
             <path d={tab.path} />
           </svg>
-          <span className="text-[8px] font-medium" style={{ color: tab.active ? '#007AFF' : c.sub }}>
+          <span className="font-medium" style={{ color: tab.active ? t.systemBlue : t.secondaryLabel, fontSize: '10px' }}>
             {tab.label}
           </span>
         </div>
@@ -162,9 +118,8 @@ function BottomTabBar({ c }: { c: C }) {
   )
 }
 
-function UploadIconZone({ icon, gradient = 'from-indigo-500 to-blue-600', size, borderRadius, onUpload }: {
+function UploadIconZone({ icon, size, borderRadius, onUpload }: {
   icon: string | null
-  gradient?: string
   size: number
   borderRadius: string
   onUpload?: (dataUrl: string) => void
@@ -192,10 +147,10 @@ function UploadIconZone({ icon, gradient = 'from-indigo-500 to-blue-600', size, 
     >
       {icon
         ? <img src={icon} alt="icon" className="w-full h-full object-cover" />
-        : <div className={`w-full h-full bg-gradient-to-br ${gradient}`} />}
+        : <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-blue-600" />}
       {onUpload && !icon && (
         <div className="absolute inset-0 flex items-end justify-center pb-1.5">
-          <span className="text-[7px] text-white/70 bg-black/30 px-1.5 py-0.5 rounded-full">tap to upload</span>
+          <span className="text-[8px] text-white/80 bg-black/30 px-1.5 py-0.5 rounded-full">tap to upload</span>
         </div>
       )}
       {onUpload && (
@@ -206,13 +161,13 @@ function UploadIconZone({ icon, gradient = 'from-indigo-500 to-blue-600', size, 
   )
 }
 
-function UploadScreenshotSlot({ src, index, height, width, borderRadius, c, onUpload }: {
+function UploadScreenshotSlot({ src, index, height, width, borderRadius, t, onUpload }: {
   src?: string
   index: number
-  height: number
-  width: number
+  height: number | string
+  width: number | string
   borderRadius: string
-  c: C
+  t: IOSTokens
   onUpload?: (index: number, dataUrl: string) => void
 }) {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -226,7 +181,7 @@ function UploadScreenshotSlot({ src, index, height, width, borderRadius, c, onUp
   return (
     <div
       className="flex-shrink-0 relative overflow-hidden"
-      style={{ width, height, borderRadius, background: src ? 'transparent' : c.sep, cursor: onUpload ? 'pointer' : 'default' }}
+      style={{ width, height, borderRadius, background: src ? 'transparent' : t.starEmpty, cursor: onUpload ? 'pointer' : 'default' }}
       onClick={() => onUpload && inputRef.current?.click()}
       onDragOver={e => { if (onUpload) e.preventDefault() }}
       onDrop={e => {
@@ -241,12 +196,12 @@ function UploadScreenshotSlot({ src, index, height, width, borderRadius, c, onUp
         : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-1">
             {onUpload && (
-              <svg viewBox="0 0 24 24" className="w-4 h-4" style={{ fill: c.sub }}>
+              <svg viewBox="0 0 24 24" className="w-5 h-5" style={{ fill: t.secondaryLabel }}>
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
               </svg>
             )}
-            <span className="text-[7px] text-center px-1" style={{ color: c.sub }}>
-              {onUpload ? 'Add' : `Screenshot ${index + 1}`}
+            <span className="text-[9px] text-center px-1" style={{ color: t.secondaryLabel }}>
+              {onUpload ? 'Add' : `${index + 1}`}
             </span>
           </div>
         )}
@@ -262,8 +217,8 @@ const AS_COMPETITORS = [
   {
     renderIcon: () => (
       <svg viewBox="0 0 60 60" className="w-full h-full">
-        <rect width="60" height="60" rx="12" fill="#FAFAFA"/>
-        <text x="8" y="48" fontSize="46" fontFamily="Georgia,serif" fontWeight="900" fill="#1C1C1E">N</text>
+        <rect width="60" height="60" rx="13" fill="#FAFAFA"/>
+        <text x="9" y="48" fontSize="46" fontFamily="Georgia,serif" fontWeight="900" fill="#1C1C1E">N</text>
       </svg>
     ),
     name: 'Notion — Notes & Projects', subtitle: 'Organize Your Work & Life',
@@ -273,7 +228,7 @@ const AS_COMPETITORS = [
   {
     renderIcon: () => (
       <svg viewBox="0 0 60 60" className="w-full h-full">
-        <rect width="60" height="60" rx="12" fill="#FC7041"/>
+        <rect width="60" height="60" rx="13" fill="#FC7041"/>
         <circle cx="30" cy="26" r="16" fill="white"/>
         <circle cx="24" cy="23" r="2.5" fill="#FC7041"/>
         <circle cx="36" cy="23" r="2.5" fill="#FC7041"/>
@@ -295,7 +250,7 @@ interface SearchCardProps {
   rating: number
   reviewCount: string
   hasIAP?: boolean
-  c: C
+  t: IOSTokens
   prefix: string
   screenshots?: string[]
   isUserApp?: boolean
@@ -305,124 +260,112 @@ interface SearchCardProps {
 }
 
 function SearchAppCard({
-  renderIcon, name, subtitle, developer, category, rating, reviewCount, hasIAP, c, prefix,
+  renderIcon, name, subtitle, developer, category, rating, reviewCount, hasIAP, t, prefix,
   screenshots = [], isUserApp, onUploadIcon, onUploadScreenshot, userIcon,
 }: SearchCardProps) {
-  const maxShots = 10
-  const slots = isUserApp
-    ? Math.min(Math.max(screenshots.length + (onUploadScreenshot && screenshots.length < maxShots ? 1 : 0), 3), maxShots)
-    : 3
-
   return (
     <div>
-      {/* Row 1: icon + name/subtitle + GET button */}
-      <div className="flex items-start gap-2.5 px-3 pt-3 pb-1">
+      {/* Row 1: icon + name/subtitle + Get button */}
+      <div className="flex items-start gap-3 px-3.5 pt-3 pb-1">
         {isUserApp ? (
-          <UploadIconZone
-            icon={userIcon ?? null}
-            size={54}
-            borderRadius="12px"
-            onUpload={onUploadIcon}
-          />
+          <UploadIconZone icon={userIcon ?? null} size={62} borderRadius="13.5px" onUpload={onUploadIcon} />
         ) : (
-          <div className="w-[54px] h-[54px] flex-shrink-0 overflow-hidden" style={{ borderRadius: '12px' }}>
+          <div className="flex-shrink-0 overflow-hidden" style={{ width: 62, height: 62, borderRadius: '13.5px' }}>
             {renderIcon()}
           </div>
         )}
-        <div className="flex-1 min-w-0 pt-0.5">
-          <p className="font-semibold text-[12px] leading-[1.25] line-clamp-2" style={{ color: c.text }}>{name}</p>
-          <p className="text-[10px] mt-0.5 line-clamp-2" style={{ color: c.sub }}>{subtitle}</p>
+        <div className="flex-1 min-w-0 pt-0">
+          <p className="font-semibold leading-tight line-clamp-2" style={{ color: t.label, fontSize: '14px' }}>{name}</p>
+          <p className="mt-0.5 line-clamp-2" style={{ color: t.secondaryLabel, fontSize: '12px', lineHeight: '1.2' }}>{subtitle}</p>
         </div>
         <div className="flex flex-col items-center gap-0.5 flex-shrink-0 pt-1">
-          <button className="text-[11px] font-bold px-3 py-[3px] rounded-full"
-            style={{ background: c.btnBg, color: '#007AFF', minWidth: '52px', textAlign: 'center' }}>
+          <button
+            className="font-semibold px-4 rounded-full"
+            style={{ background: t.buttonTint, color: t.systemBlue, fontSize: '14px', height: '28px', minWidth: '64px' }}
+          >
             GET
           </button>
           {hasIAP && (
-            <span className="text-[7px] text-center leading-tight" style={{ color: c.sub }}>In-App<br/>Purchases</span>
+            <span className="text-center leading-tight" style={{ color: t.secondaryLabel, fontSize: '9px' }}>In-App<br/>Purchases</span>
           )}
         </div>
       </div>
 
-      {/* Row 2: stars · developer · category */}
-      <div className="flex items-center gap-1 px-3 pb-2 pt-1">
-        <Stars rating={rating} size={9} emptyColor={c.starEmpty} prefix={prefix} />
-        <span className="text-[9px]" style={{ color: c.sub }}>{reviewCount}</span>
-        <span className="text-[9px] mx-0.5" style={{ color: c.sep }}>·</span>
-        <svg viewBox="0 0 24 24" width="9" height="9" style={{ fill: c.sub, flexShrink: 0 }}>
-          <path d="M12 12c2.7 0 4-1.3 4-4s-1.3-4-4-4-4 1.3-4 4 1.3 4 4 4zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/>
-        </svg>
-        <span className="text-[9px] line-clamp-1 min-w-0" style={{ color: c.sub }}>{developer}</span>
-        <span className="text-[9px] mx-0.5" style={{ color: c.sep }}>·</span>
-        <svg viewBox="0 0 24 24" width="9" height="9" style={{ fill: c.sub, flexShrink: 0 }}>
-          <path d="M4 4h4v4H4zm5 0h4v4H9zm5 0h4v4h-4zM4 9h4v4H4zm5 0h4v4H9zm5 0h4v4h-4z"/>
-        </svg>
-        <span className="text-[9px]" style={{ color: c.sub }}>{category}</span>
+      {/* Row 2: stars · reviews · dev · category */}
+      <div className="flex items-center gap-1 px-3.5 pb-2.5 pt-1">
+        <Stars rating={rating} size={10} emptyColor={t.starEmpty} prefix={prefix} />
+        <span style={{ color: t.secondaryLabel, fontSize: '10px' }}>{reviewCount}</span>
+        <span className="mx-1" style={{ color: t.tertiaryLabel, fontSize: '10px' }}>·</span>
+        <User className="w-2.5 h-2.5 flex-shrink-0" style={{ color: t.secondaryLabel }} />
+        <span className="line-clamp-1 min-w-0" style={{ color: t.secondaryLabel, fontSize: '10px' }}>{developer}</span>
+        <span className="mx-1" style={{ color: t.tertiaryLabel, fontSize: '10px' }}>·</span>
+        <Grid3X3 className="w-2.5 h-2.5 flex-shrink-0" style={{ color: t.secondaryLabel }} />
+        <span className="line-clamp-1" style={{ color: t.secondaryLabel, fontSize: '10px' }}>{category}</span>
       </div>
 
-      {/* Row 3: screenshots */}
-      <DragScrollX className="px-3 pb-3 gap-1.5">
-        {Array.from({ length: slots }).map((_, i) => (
+      {/* Row 3: screenshots — 3 wide, equal flex */}
+      <div className="flex px-3.5 pb-3 gap-2">
+        {[0, 1, 2].map(i => (
           isUserApp ? (
             <UploadScreenshotSlot
               key={i}
               src={screenshots[i]}
               index={i}
-              height={160}
-              width={screenshots[i] ? 88 : 80}
-              borderRadius="8px"
-              c={c}
+              height={193}
+              width="100%"
+              borderRadius="10px"
+              t={t}
               onUpload={onUploadScreenshot}
             />
           ) : (
-            <div key={i} className="flex-shrink-0 rounded-[8px]"
-              style={{ width: 80, height: 160, background: c.sep }} />
+            <div key={i} className="flex-1 rounded-[10px]"
+              style={{ height: 193, background: t.starEmpty }} />
           )
         ))}
-      </DragScrollX>
+      </div>
     </div>
   )
 }
 
-function SearchView({ data, c, onUploadIcon, onUploadScreenshot }: {
-  data: AppData, c: C, onUploadIcon?: (d: string) => void, onUploadScreenshot?: (i: number, d: string) => void
+function SearchView({ data, t, onUploadIcon, onUploadScreenshot }: {
+  data: AppData, t: IOSTokens, onUploadIcon?: (d: string) => void, onUploadScreenshot?: (i: number, d: string) => void
 }) {
-  const price = formatPrice(data.price)
   const reviews = formatReviews(data.reviewCount)
-  const btn = price === 'Free' ? 'GET' : price
 
   return (
-    <div className="h-full flex flex-col" style={{ background: c.bg }}>
-      <StatusBar c={c} />
+    <div className="h-full flex flex-col" style={{ background: t.systemBackground, fontFamily: 'var(--font-ios), -apple-system, BlinkMacSystemFont, sans-serif' }}>
+      <StatusBar t={t} />
 
-      {/* Search bar sticky */}
-      <div className="flex-shrink-0 px-4 pb-2 flex items-center gap-2" style={{ background: c.bg }}>
-        <div className="flex-1 rounded-[10px] px-3 py-[7px] flex items-center gap-2"
-          style={{ background: c.searchBg, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-          <svg viewBox="0 0 24 24" className="w-[14px] h-[14px] flex-shrink-0" style={{ fill: c.searchText }}>
-            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
-          </svg>
-          <span className="text-[13px]" style={{ color: c.searchText }}>Search</span>
+      {/* Search field row sticky */}
+      <div className="flex-shrink-0 px-4 pb-2 flex items-center gap-3" style={{ background: t.systemBackground }}>
+        <div className="flex-1 flex items-center gap-1.5 rounded-[10px] px-2.5"
+          style={{ background: t.searchFieldBg, height: '36px' }}>
+          <Search className="w-4 h-4" style={{ color: t.searchFieldText }} />
+          <span className="flex-1" style={{ color: t.searchFieldText, fontSize: '15px' }}>Search</span>
+          <div className="flex items-center gap-1">
+            <button className="flex-shrink-0 w-[18px] h-[18px] rounded-full flex items-center justify-center" style={{ background: t.starEmpty }}>
+              <X className="w-2.5 h-2.5" style={{ color: t.searchFieldBg }} strokeWidth={3}/>
+            </button>
+          </div>
         </div>
-        <button className="text-[14px] font-medium flex-shrink-0" style={{ color: '#007AFF' }}>Cancel</button>
+        <button style={{ color: t.systemBlue, fontSize: '15px' }}>Cancel</button>
       </div>
 
       {/* Related search chips sticky */}
-      <div className="flex-shrink-0 flex gap-2 px-4 pb-2 overflow-x-auto [&::-webkit-scrollbar]:hidden"
-        style={{ background: c.bg }}>
-        {['Puzzle', 'Arcade', 'Strategy', 'Word', 'Casual'].map(chip => (
+      <div className="flex-shrink-0 flex gap-2 px-4 pb-3 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+        style={{ background: t.systemBackground }}>
+        {['puzzle', 'car', 'cooking', 'brain', 'word', 'offline'].map(chip => (
           <div key={chip}
-            className="flex-shrink-0 px-3 py-1 rounded-full text-[11px] font-medium whitespace-nowrap"
-            style={{ border: `1px solid ${c.sep}`, color: c.sub, background: 'transparent' }}>
+            className="flex-shrink-0 px-3 py-1 rounded-full whitespace-nowrap"
+            style={{ background: t.searchFieldBg, color: t.label, fontSize: '12px', lineHeight: '20px' }}>
             {chip}
           </div>
         ))}
       </div>
 
       {/* Scrollable cards */}
-      <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden px-3 pb-2 pt-1 flex flex-col gap-3">
-        {/* User app card — tinted rounded block */}
-        <div style={{ background: c.card, borderRadius: '14px' }} className="overflow-hidden">
+      <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden px-3 pb-3 flex flex-col gap-3">
+        <div style={{ background: t.cardSearchTint, borderRadius: '14px' }} className="overflow-hidden">
           <SearchAppCard
             renderIcon={() => null}
             name={data.appName || 'App Name'}
@@ -432,7 +375,7 @@ function SearchView({ data, c, onUploadIcon, onUploadScreenshot }: {
             rating={data.rating}
             reviewCount={reviews}
             hasIAP={data.hasInAppPurchases}
-            c={c}
+            t={t}
             prefix="asusr"
             screenshots={data.screenshots}
             isUserApp
@@ -442,9 +385,8 @@ function SearchView({ data, c, onUploadIcon, onUploadScreenshot }: {
           />
         </div>
 
-        {/* Competitor cards — each a separate tinted block */}
         {AS_COMPETITORS.map((comp, idx) => (
-          <div key={idx} style={{ background: c.card, borderRadius: '14px' }} className="overflow-hidden">
+          <div key={idx} style={{ background: t.cardSearchTint, borderRadius: '14px' }} className="overflow-hidden">
             <SearchAppCard
               renderIcon={comp.renderIcon}
               name={comp.name}
@@ -454,7 +396,7 @@ function SearchView({ data, c, onUploadIcon, onUploadScreenshot }: {
               rating={comp.rating}
               reviewCount={comp.reviewCount}
               hasIAP={comp.hasIAP}
-              c={c}
+              t={t}
               prefix={comp.prefix}
               isUserApp={false}
             />
@@ -462,186 +404,168 @@ function SearchView({ data, c, onUploadIcon, onUploadScreenshot }: {
         ))}
       </div>
 
-      <BottomTabBar c={c} />
+      <BottomTabBar t={t} />
     </div>
   )
 }
 
-function DetailView({ data, c, onUploadIcon, onUploadScreenshot }: {
-  data: AppData, c: C, onUploadIcon?: (d: string) => void, onUploadScreenshot?: (i: number, d: string) => void
+function DetailView({ data, t, onUploadIcon, onUploadScreenshot }: {
+  data: AppData, t: IOSTokens, onUploadIcon?: (d: string) => void, onUploadScreenshot?: (i: number, d: string) => void
 }) {
   const price = formatPrice(data.price)
   const rating = formatRating(data.rating)
   const reviews = formatReviews(data.reviewCount)
-  const btn = price === 'Free' ? 'GET' : price
+  const btn = price === 'Free' ? 'Get' : price
 
   const maxShots = 10
   const slots = Math.min(Math.max(data.screenshots.length + (onUploadScreenshot && data.screenshots.length < maxShots ? 1 : 0), 3), maxShots)
 
   return (
-    <div className="h-full flex flex-col" style={{ background: c.bg }}>
-      <StatusBar c={c} />
+    <div className="h-full flex flex-col" style={{ background: t.systemBackground, fontFamily: 'var(--font-ios), -apple-system, BlinkMacSystemFont, sans-serif' }}>
+      <StatusBar t={t} />
 
       {/* Nav row */}
-      <div className="flex-shrink-0 flex items-center justify-between px-4 pb-2" style={{ background: c.bg }}>
-        <button className="flex items-center gap-0.5 text-[15px]" style={{ color: '#007AFF' }}>
-          <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-current">
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-          </svg>
+      <div className="flex-shrink-0 flex items-center justify-between px-3 py-1" style={{ background: t.systemBackground }}>
+        <button className="w-9 h-9 flex items-center justify-center rounded-full" style={{ background: t.searchFieldBg }}>
+          <ChevronLeft className="w-5 h-5" style={{ color: t.systemBlue }} strokeWidth={2.5} />
         </button>
-        <svg viewBox="0 0 24 24" className="w-5 h-5" style={{ fill: '#007AFF' }}>
-          <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
-        </svg>
+        <button className="w-9 h-9 flex items-center justify-center rounded-full" style={{ background: t.searchFieldBg }}>
+          <Share className="w-[18px] h-[18px]" style={{ color: t.systemBlue }} strokeWidth={2} />
+        </button>
       </div>
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {/* App header */}
-        <div className="px-4 pb-4 flex gap-4" style={{ background: c.card }}>
-          <UploadIconZone
-            icon={data.iconDataUrl || null}
-            size={100}
-            borderRadius="22px"
-            onUpload={onUploadIcon}
-          />
-          <div className="flex-1 min-w-0 pt-1">
-            <h1 className="font-bold leading-tight" style={{ color: c.text, fontSize: '17px' }}>
+        <div className="px-4 pb-4 flex gap-4" style={{ background: t.systemBackground }}>
+          <UploadIconZone icon={data.iconDataUrl || null} size={114} borderRadius="24px" onUpload={onUploadIcon} />
+          <div className="flex-1 min-w-0 pt-0.5 flex flex-col">
+            <h1 className="font-bold leading-[1.1]" style={{ color: t.label, fontSize: '20px' }}>
               {data.appName || 'App Name'}
             </h1>
-            <p className="text-[13px] mt-0.5 line-clamp-1" style={{ color: c.sub }}>
+            <p className="mt-1 line-clamp-1" style={{ color: t.secondaryLabel, fontSize: '14px' }}>
               {data.subtitle || 'App Subtitle'}
             </p>
-            <p className="text-[12px] mt-0.5 font-medium" style={{ color: '#007AFF' }}>
-              {data.developerName || 'Developer'}
-            </p>
-            <div className="mt-2 flex items-center gap-2 flex-wrap">
+            <div className="flex-1" />
+            <div className="flex items-center gap-2">
               <button
-                className="text-[13px] font-bold rounded-full text-center"
-                style={{ background: '#007AFF', color: '#fff', minWidth: '60px', height: '26px', padding: '0 18px', letterSpacing: '0.1px' }}>
-                {btn === 'GET' ? 'Get' : btn}
+                className="font-bold rounded-full text-center"
+                style={{ background: t.systemBlue, color: '#fff', minWidth: '74px', height: '30px', padding: '0 22px', fontSize: '15px', letterSpacing: '0.1px' }}>
+                {btn}
               </button>
               {data.hasInAppPurchases && (
-                <span className="text-[8px] leading-tight" style={{ color: c.sub }}>In-App<br/>Purchases</span>
+                <span className="leading-tight" style={{ color: t.secondaryLabel, fontSize: '9px' }}>In-App<br/>Purchases</span>
               )}
             </div>
           </div>
         </div>
 
-        <div style={{ height: '0.5px', background: c.border }} />
+        <div style={{ height: '0.5px', background: t.hairline, margin: '0 16px' }} />
 
-        {/* Badges row — 4 columns. Layout: label (top) -> big value (middle) -> sublabel (bottom) */}
-        <div className="flex" style={{ background: c.card }}>
+        {/* Badges row — 4 columns: label TOP, big value MIDDLE, sublabel BOTTOM */}
+        <div className="flex" style={{ background: t.systemBackground }}>
           {([
             {
-              label: `${formatReviews(data.reviewCount)} Ratings`,
-              big: <div className="text-[17px] font-bold leading-none" style={{ color: c.text }}>{rating}</div>,
-              sub: <Stars rating={data.rating} size={8} emptyColor={c.starEmpty} prefix="asdt" />,
+              label: `${reviews} Ratings`,
+              big: <div className="font-bold leading-none" style={{ color: t.label, fontSize: '20px' }}>{rating}</div>,
+              sub: <Stars rating={data.rating} size={9} emptyColor={t.starEmpty} prefix="asdt" />,
             },
             {
               label: 'Age Rating',
-              big: <div className="text-[17px] font-bold leading-none" style={{ color: c.text }}>4+</div>,
-              sub: <span className="text-[8px]" style={{ color: c.sub }}>Years</span>,
+              big: <div className="font-bold leading-none" style={{ color: t.label, fontSize: '20px' }}>4+</div>,
+              sub: <span style={{ color: t.secondaryLabel, fontSize: '9px' }}>Years</span>,
             },
             {
               label: 'Category',
-              big: (
-                <svg viewBox="0 0 24 24" width="18" height="18" style={{ fill: c.sub }}>
-                  <path d="M4 4h5v5H4zm0 6h5v5H4zm6-6h5v5h-5zm0 6h5v5h-5zm6-6h4v5h-4zm0 6h4v5h-4z"/>
-                </svg>
-              ),
-              sub: <span className="text-[9px] font-medium line-clamp-1" style={{ color: c.text }}>{data.category || 'Utilities'}</span>,
+              big: <Grid3X3 className="w-5 h-5" style={{ color: t.secondaryLabel }} strokeWidth={2} />,
+              sub: <span className="font-semibold line-clamp-1" style={{ color: t.label, fontSize: '10px' }}>{data.category || 'Utilities'}</span>,
             },
             {
               label: 'Developer',
-              big: (
-                <svg viewBox="0 0 24 24" width="18" height="18" style={{ fill: c.sub }}>
-                  <path d="M12 12c2.7 0 4-1.3 4-4s-1.3-4-4-4-4 1.3-4 4 1.3 4 4 4zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/>
-                </svg>
-              ),
-              sub: <span className="text-[9px] font-medium line-clamp-1" style={{ color: c.text }}>{data.developerName || 'Developer'}</span>,
+              big: <User className="w-5 h-5" style={{ color: t.secondaryLabel }} strokeWidth={2} />,
+              sub: <span className="font-semibold line-clamp-1" style={{ color: t.label, fontSize: '10px' }}>{data.developerName || 'Developer'}</span>,
             },
           ] as { label: string, big: React.ReactNode, sub: React.ReactNode }[]).map((item, idx, arr) => (
             <div key={idx}
-              className="flex-1 flex flex-col items-center justify-between py-2.5 px-1 text-center gap-1"
-              style={{ borderRight: idx < arr.length - 1 ? `0.5px solid ${c.border}` : 'none', minHeight: '64px' }}>
-              <div className="text-[8px] uppercase tracking-wider font-semibold" style={{ color: c.sub }}>{item.label}</div>
+              className="flex-1 flex flex-col items-center justify-between py-3 px-1 text-center gap-1.5"
+              style={{ borderRight: idx < arr.length - 1 ? `0.5px solid ${t.hairline}` : 'none', minHeight: '78px' }}>
+              <div className="uppercase font-semibold tracking-wider" style={{ color: t.secondaryLabel, fontSize: '9px' }}>{item.label}</div>
               <div className="flex items-center justify-center">{item.big}</div>
               <div className="flex justify-center w-full px-0.5">{item.sub}</div>
             </div>
           ))}
         </div>
 
-        <div style={{ height: '0.5px', background: c.border }} />
+        <div style={{ height: '0.5px', background: t.hairline, margin: '0 16px' }} />
 
-        {/* Screenshots */}
-        <div className="py-3" style={{ background: c.card }}>
+        {/* Screenshots — large portrait, scroll horizontal */}
+        <div className="py-4" style={{ background: t.systemBackground }}>
           <DragScrollX className="px-4 gap-3">
             {Array.from({ length: slots }).map((_, i) => (
               <UploadScreenshotSlot
                 key={i}
                 src={data.screenshots[i]}
                 index={i}
-                height={210}
-                width={data.screenshots[i] ? 115 : 105}
-                borderRadius="12px"
-                c={c}
+                height={260}
+                width={data.screenshots[i] ? 142 : 130}
+                borderRadius="14px"
+                t={t}
                 onUpload={onUploadScreenshot}
               />
             ))}
           </DragScrollX>
         </div>
 
-        <div style={{ height: '0.5px', background: c.border }} />
+        <div style={{ height: '0.5px', background: t.hairline, margin: '0 16px' }} />
 
         {/* Description */}
-        <div className="px-4 py-3" style={{ background: c.card }}>
-          <p className="text-[12px] leading-relaxed line-clamp-3" style={{ color: c.text }}>
+        <div className="px-4 py-4" style={{ background: t.systemBackground }}>
+          <p className="leading-relaxed line-clamp-3" style={{ color: t.label, fontSize: '14px' }}>
             {data.subtitle || 'Short description of your app. This section shows your app\'s long description from the App Store listing.'}
           </p>
-          <button className="text-[12px] mt-1 font-medium" style={{ color: '#007AFF' }}>more</button>
+          <button className="mt-1 font-semibold" style={{ color: t.systemBlue, fontSize: '14px' }}>more</button>
         </div>
 
-        <div style={{ height: '8px', background: c.bg }} />
-
         {/* Ratings widget */}
-        <div className="px-4 py-3" style={{ background: c.card }}>
-          <h2 className="text-[15px] font-semibold mb-2" style={{ color: c.text }}>Ratings &amp; Reviews</h2>
-          <div className="flex items-end gap-3">
+        <div className="px-4 py-3 mt-2" style={{ background: t.systemBackground, borderTop: `0.5px solid ${t.hairline}` }}>
+          <h2 className="font-bold mb-3" style={{ color: t.label, fontSize: '17px' }}>Ratings &amp; Reviews</h2>
+          <div className="flex items-end gap-4">
             <div className="text-center">
-              <div className="text-[42px] font-thin leading-none" style={{ color: c.text }}>{rating}</div>
-              <div className="flex justify-center mt-1">
-                <Stars rating={data.rating} size={10} emptyColor={c.starEmpty} prefix="asdtb" />
+              <div className="font-bold leading-none" style={{ color: t.label, fontSize: '46px', letterSpacing: '-1.5px' }}>{rating}</div>
+              <div className="flex justify-center mt-1.5">
+                <Stars rating={data.rating} size={11} emptyColor={t.starEmpty} prefix="asdtb" />
               </div>
-              <div className="text-[9px] mt-1" style={{ color: c.sub }}>out of 5</div>
+              <div className="mt-1" style={{ color: t.secondaryLabel, fontSize: '11px' }}>out of 5</div>
             </div>
             <div className="flex-1">
               {[5, 4, 3, 2, 1].map(star => {
                 const pct = star === 5 ? 85 : star === 4 ? 10 : star === 3 ? 3 : 1
                 return (
                   <div key={star} className="flex items-center gap-1.5 mb-0.5">
-                    <span className="text-[8px] w-2 text-right" style={{ color: c.sub }}>{star}</span>
-                    <div className="flex-1 rounded-full h-[3px] overflow-hidden" style={{ background: c.border }}>
-                      <div className="h-full rounded-full" style={{ width: `${pct}%`, background: '#FF9500' }} />
+                    <span className="w-2 text-right" style={{ color: t.secondaryLabel, fontSize: '10px' }}>{star}</span>
+                    <div className="flex-1 rounded-full overflow-hidden" style={{ background: t.hairline, height: '4px' }}>
+                      <div className="h-full rounded-full" style={{ width: `${pct}%`, background: t.secondaryLabel }} />
                     </div>
                   </div>
                 )
               })}
-              <div className="text-[9px] mt-1" style={{ color: c.sub }}>{formatReviews(data.reviewCount)} Ratings</div>
+              <div className="mt-1" style={{ color: t.secondaryLabel, fontSize: '11px' }}>{reviews} Ratings</div>
             </div>
           </div>
         </div>
 
-        <div className="h-4" />
+        <div className="h-6" />
       </div>
 
-      <BottomTabBar c={c} />
+      <BottomTabBar t={t} />
     </div>
   )
 }
 
 export function AppStorePreview({ data, dark = false, mode = 'search', onUploadIcon, onUploadScreenshot }: Props) {
-  const c = colors(dark)
+  const theme: Theme = dark ? 'dark' : 'light'
+  const t = iosTokens(theme)
   return mode === 'search'
-    ? <SearchView data={data} c={c} onUploadIcon={onUploadIcon} onUploadScreenshot={onUploadScreenshot} />
-    : <DetailView data={data} c={c} onUploadIcon={onUploadIcon} onUploadScreenshot={onUploadScreenshot} />
+    ? <SearchView data={data} t={t} onUploadIcon={onUploadIcon} onUploadScreenshot={onUploadScreenshot} />
+    : <DetailView data={data} t={t} onUploadIcon={onUploadIcon} onUploadScreenshot={onUploadScreenshot} />
 }
