@@ -17,6 +17,8 @@ export interface StoreVisibility {
   appStore: boolean
 }
 
+export type PreviewMode = 'detail' | 'search'
+
 export const DEFAULT_APP_DATA: AppData = {
   appName: 'Your App Name',
   subtitle: 'App Subtitle',

@@ -8,7 +8,7 @@ import { AppStorePreview } from '@/components/AppStorePreview'
 import { useAppData } from '@/lib/useAppData'
 import { useDarkMode } from '@/lib/useDarkMode'
 import { downloadPreview } from '@/lib/export'
-import { StoreVisibility } from '@/lib/types'
+import { StoreVisibility, PreviewMode } from '@/lib/types'
 
 export default function Home() {
   const { appData, setField, clearData } = useAppData()
@@ -17,6 +17,7 @@ export default function Home() {
     googlePlay: true,
     appStore: true,
   })
+  const [previewMode, setPreviewMode] = useState<PreviewMode>('search')
 
   function toggleStore(store: keyof StoreVisibility) {
     setVisibility(v => ({ ...v, [store]: !v[store] }))
@@ -29,6 +30,8 @@ export default function Home() {
         onToggle={toggleStore}
         darkMode={dark}
         onToggleDark={toggleDark}
+        previewMode={previewMode}
+        onPreviewModeChange={setPreviewMode}
       />
 
       <div className="flex flex-1 overflow-hidden">
@@ -51,7 +54,7 @@ export default function Home() {
                 </span>
                 <div id="gp-preview">
                   <PhoneFrame type="android">
-                    <GooglePlayPreview data={appData} />
+                    <GooglePlayPreview data={appData} dark={dark} mode={previewMode} />
                   </PhoneFrame>
                 </div>
               </div>
@@ -64,7 +67,7 @@ export default function Home() {
                 </span>
                 <div id="as-preview">
                   <PhoneFrame type="ios">
-                    <AppStorePreview data={appData} />
+                    <AppStorePreview data={appData} dark={dark} mode={previewMode} />
                   </PhoneFrame>
                 </div>
               </div>

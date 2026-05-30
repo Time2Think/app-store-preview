@@ -1,14 +1,16 @@
 'use client'
-import { StoreVisibility } from '@/lib/types'
+import { StoreVisibility, PreviewMode } from '@/lib/types'
 
 interface HeaderProps {
   visibility: StoreVisibility
   onToggle: (store: keyof StoreVisibility) => void
   darkMode: boolean
   onToggleDark: () => void
+  previewMode: PreviewMode
+  onPreviewModeChange: (mode: PreviewMode) => void
 }
 
-export function Header({ visibility, onToggle, darkMode, onToggleDark }: HeaderProps) {
+export function Header({ visibility, onToggle, darkMode, onToggleDark, previewMode, onPreviewModeChange }: HeaderProps) {
   return (
     <header className="h-12 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex items-center justify-between px-4 flex-shrink-0">
       <div className="flex items-center gap-2">
@@ -39,10 +41,40 @@ export function Header({ visibility, onToggle, darkMode, onToggleDark }: HeaderP
           App Store
         </button>
 
+        {/* Separator */}
+        <div className="w-px h-5 bg-gray-200 dark:bg-gray-700 mx-1" />
+
+        {/* View mode toggle */}
+        <div className="flex items-center rounded-full p-0.5 bg-gray-100 dark:bg-gray-800">
+          <button
+            onClick={() => onPreviewModeChange('detail')}
+            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+              previewMode === 'detail'
+                ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-500 dark:text-gray-400'
+            }`}
+          >
+            Detail
+          </button>
+          <button
+            onClick={() => onPreviewModeChange('search')}
+            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+              previewMode === 'search'
+                ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-500 dark:text-gray-400'
+            }`}
+          >
+            Search
+          </button>
+        </div>
+
+        {/* Separator */}
+        <div className="w-px h-5 bg-gray-200 dark:bg-gray-700 mx-1" />
+
         {/* Dark mode */}
         <button
           onClick={onToggleDark}
-          className="ml-2 w-8 h-8 flex items-center justify-center rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          className="w-8 h-8 flex items-center justify-center rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           title="Toggle dark mode"
         >
           {darkMode ? '☀️' : '🌙'}
