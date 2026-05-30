@@ -37,12 +37,12 @@ function colors(dark: boolean): C {
     tabBar: '#1c1c1e',
   }
   return {
-    bg: '#f2f2f7',
-    card: '#ffffff',
+    bg: '#ffffff',
+    card: '#EEF3FB',
     text: '#1c1c1e',
     sub: '#8e8e93',
     sep: '#c7c7cc',
-    searchBg: '#ffffff',
+    searchBg: '#EEEEF0',
     searchText: '#8e8e93',
     btnBg: '#E5F0FF',
     starEmpty: '#D1D5DB',
@@ -99,15 +99,26 @@ function DragScrollX({ children, className }: { children: React.ReactNode, class
 
 function StatusBar({ c }: { c: C }) {
   return (
-    <div className="flex justify-between items-center px-5 pt-8 pb-1 text-[12px] font-semibold flex-shrink-0"
-      style={{ color: c.text }}>
-      <span>9:41</span>
-      <div className="flex items-center gap-1.5">
-        <svg viewBox="0 0 24 24" className="w-[14px] h-[14px] fill-current">
-          <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z" />
+    <div className="flex justify-between items-center flex-shrink-0"
+      style={{ color: c.text, height: '38px', padding: '0 22px' }}>
+      <span style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '-0.2px' }}>9:41</span>
+      <div className="flex items-center gap-[5px]">
+        {/* Signal bars */}
+        <svg viewBox="0 0 18 12" width="14" height="10" className="fill-current">
+          <rect x="0" y="8" width="3" height="4" rx="0.5"/>
+          <rect x="4" y="6" width="3" height="6" rx="0.5"/>
+          <rect x="8" y="3" width="3" height="9" rx="0.5"/>
+          <rect x="12" y="0" width="3" height="12" rx="0.5"/>
         </svg>
-        <svg viewBox="0 0 24 24" className="w-[14px] h-[14px] fill-current">
-          <path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z" />
+        {/* WiFi */}
+        <svg viewBox="0 0 16 12" width="13" height="10" className="fill-current">
+          <path d="M8 11.5l1.5-1.5c-.83-.83-2.17-.83-3 0L8 11.5zm-3-3l1.5 1.5c.83-.83 2.17-.83 3 0L11 8.5c-1.66-1.66-4.34-1.66-6 0zM2 5.5l1.5 1.5c2.5-2.5 6.5-2.5 9 0L14 5.5C10.69 2.19 5.31 2.19 2 5.5z"/>
+        </svg>
+        {/* Battery */}
+        <svg viewBox="0 0 26 12" width="22" height="10">
+          <rect x="0.5" y="0.5" width="22" height="11" rx="3" ry="3" fill="none" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1"/>
+          <rect x="2" y="2" width="19" height="8" rx="1.5" ry="1.5" fill="currentColor"/>
+          <rect x="23.5" y="4" width="1.5" height="4" rx="0.5" fill="currentColor" fillOpacity="0.4"/>
         </svg>
       </div>
     </div>
@@ -305,41 +316,43 @@ function SearchAppCard({
   return (
     <div>
       {/* Row 1: icon + name/subtitle + GET button */}
-      <div className="flex items-center gap-3 px-4 py-3 pb-1">
+      <div className="flex items-start gap-2.5 px-3 pt-3 pb-1">
         {isUserApp ? (
           <UploadIconZone
             icon={userIcon ?? null}
-            size={60}
-            borderRadius="13px"
+            size={54}
+            borderRadius="12px"
             onUpload={onUploadIcon}
           />
         ) : (
-          <div className="w-[60px] h-[60px] flex-shrink-0 overflow-hidden" style={{ borderRadius: '13px' }}>
+          <div className="w-[54px] h-[54px] flex-shrink-0 overflow-hidden" style={{ borderRadius: '12px' }}>
             {renderIcon()}
           </div>
         )}
-        <div className="flex-1 min-w-0">
-          <p className="font-bold text-[14px] leading-tight line-clamp-1" style={{ color: c.text }}>{name}</p>
-          <p className="text-[11px] mt-0.5 line-clamp-1" style={{ color: c.sub }}>{subtitle}</p>
+        <div className="flex-1 min-w-0 pt-0.5">
+          <p className="font-semibold text-[12px] leading-[1.25] line-clamp-2" style={{ color: c.text }}>{name}</p>
+          <p className="text-[10px] mt-0.5 line-clamp-2" style={{ color: c.sub }}>{subtitle}</p>
+        </div>
+        <div className="flex flex-col items-center gap-0.5 flex-shrink-0 pt-1">
+          <button className="text-[11px] font-bold px-3 py-[3px] rounded-full"
+            style={{ background: c.btnBg, color: '#007AFF', minWidth: '52px', textAlign: 'center' }}>
+            GET
+          </button>
           {hasIAP && (
-            <span className="text-[9px] mt-0.5 inline-block" style={{ color: c.sub }}>In-App Purchases</span>
+            <span className="text-[7px] text-center leading-tight" style={{ color: c.sub }}>In-App<br/>Purchases</span>
           )}
         </div>
-        <button className="text-[13px] font-semibold px-4 py-[5px] rounded-full flex-shrink-0"
-          style={{ background: c.btnBg, color: '#007AFF', minWidth: '56px', textAlign: 'center' }}>
-          GET
-        </button>
       </div>
 
       {/* Row 2: stars · developer · category */}
-      <div className="flex items-center gap-1 px-4 pb-2">
+      <div className="flex items-center gap-1 px-3 pb-2 pt-1">
         <Stars rating={rating} size={9} emptyColor={c.starEmpty} prefix={prefix} />
         <span className="text-[9px]" style={{ color: c.sub }}>{reviewCount}</span>
         <span className="text-[9px] mx-0.5" style={{ color: c.sep }}>·</span>
         <svg viewBox="0 0 24 24" width="9" height="9" style={{ fill: c.sub, flexShrink: 0 }}>
           <path d="M12 12c2.7 0 4-1.3 4-4s-1.3-4-4-4-4 1.3-4 4 1.3 4 4 4zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/>
         </svg>
-        <span className="text-[9px] line-clamp-1" style={{ color: c.sub }}>{developer}</span>
+        <span className="text-[9px] line-clamp-1 min-w-0" style={{ color: c.sub }}>{developer}</span>
         <span className="text-[9px] mx-0.5" style={{ color: c.sep }}>·</span>
         <svg viewBox="0 0 24 24" width="9" height="9" style={{ fill: c.sub, flexShrink: 0 }}>
           <path d="M4 4h4v4H4zm5 0h4v4H9zm5 0h4v4h-4zM4 9h4v4H4zm5 0h4v4H9zm5 0h4v4h-4z"/>
@@ -348,7 +361,7 @@ function SearchAppCard({
       </div>
 
       {/* Row 3: screenshots */}
-      <DragScrollX className="px-4 pb-3 gap-2">
+      <DragScrollX className="px-3 pb-3 gap-1.5">
         {Array.from({ length: slots }).map((_, i) => (
           isUserApp ? (
             <UploadScreenshotSlot
@@ -407,9 +420,9 @@ function SearchView({ data, c, onUploadIcon, onUploadScreenshot }: {
       </div>
 
       {/* Scrollable cards */}
-      <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden">
-        {/* User app card — flat, hairline separator below */}
-        <div style={{ background: c.card }}>
+      <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden px-3 pb-2 pt-1 flex flex-col gap-3">
+        {/* User app card — tinted rounded block */}
+        <div style={{ background: c.card, borderRadius: '14px' }} className="overflow-hidden">
           <SearchAppCard
             renderIcon={() => null}
             name={data.appName || 'App Name'}
@@ -429,14 +442,9 @@ function SearchView({ data, c, onUploadIcon, onUploadScreenshot }: {
           />
         </div>
 
-        {/* "You might also like" separator */}
-        <div className="px-4 py-2" style={{ borderTop: `0.5px solid ${c.border}` }}>
-          <p className="text-[11px] font-semibold" style={{ color: c.sub }}>You might also like</p>
-        </div>
-
-        {/* Competitor cards */}
+        {/* Competitor cards — each a separate tinted block */}
         {AS_COMPETITORS.map((comp, idx) => (
-          <div key={idx} style={{ background: c.card, borderTop: idx === 0 ? 'none' : `0.5px solid ${c.border}` }}>
+          <div key={idx} style={{ background: c.card, borderRadius: '14px' }} className="overflow-hidden">
             <SearchAppCard
               renderIcon={comp.renderIcon}
               name={comp.name}
@@ -450,13 +458,8 @@ function SearchView({ data, c, onUploadIcon, onUploadScreenshot }: {
               prefix={comp.prefix}
               isUserApp={false}
             />
-            {idx < AS_COMPETITORS.length - 1 && (
-              <div style={{ height: '0.5px', background: c.border, margin: '0 16px' }} />
-            )}
           </div>
         ))}
-
-        <div className="h-2" />
       </div>
 
       <BottomTabBar c={c} />
@@ -513,12 +516,12 @@ function DetailView({ data, c, onUploadIcon, onUploadScreenshot }: {
             </p>
             <div className="mt-2 flex items-center gap-2 flex-wrap">
               <button
-                className="text-[14px] font-semibold rounded-full text-center"
-                style={{ background: '#007AFF', color: '#fff', minWidth: '62px', height: '28px', padding: '0 16px' }}>
-                {btn}
+                className="text-[13px] font-bold rounded-full text-center"
+                style={{ background: '#007AFF', color: '#fff', minWidth: '60px', height: '26px', padding: '0 18px', letterSpacing: '0.1px' }}>
+                {btn === 'GET' ? 'Get' : btn}
               </button>
               {data.hasInAppPurchases && (
-                <span className="text-[9px]" style={{ color: c.sub }}>In-App Purchases</span>
+                <span className="text-[8px] leading-tight" style={{ color: c.sub }}>In-App<br/>Purchases</span>
               )}
             </div>
           </div>
@@ -526,47 +529,44 @@ function DetailView({ data, c, onUploadIcon, onUploadScreenshot }: {
 
         <div style={{ height: '0.5px', background: c.border }} />
 
-        {/* Badges row — 4 columns */}
+        {/* Badges row — 4 columns. Layout: label (top) -> big value (middle) -> sublabel (bottom) */}
         <div className="flex" style={{ background: c.card }}>
           {([
             {
-              top: rating,
-              middle: <Stars rating={data.rating} size={9} emptyColor={c.starEmpty} prefix="asdt" />,
               label: `${formatReviews(data.reviewCount)} Ratings`,
+              big: <div className="text-[17px] font-bold leading-none" style={{ color: c.text }}>{rating}</div>,
+              sub: <Stars rating={data.rating} size={8} emptyColor={c.starEmpty} prefix="asdt" />,
             },
             {
-              top: '4+',
-              middle: null,
               label: 'Age Rating',
+              big: <div className="text-[17px] font-bold leading-none" style={{ color: c.text }}>4+</div>,
+              sub: <span className="text-[8px]" style={{ color: c.sub }}>Years</span>,
             },
             {
-              top: (
+              label: 'Category',
+              big: (
                 <svg viewBox="0 0 24 24" width="18" height="18" style={{ fill: c.sub }}>
                   <path d="M4 4h5v5H4zm0 6h5v5H4zm6-6h5v5h-5zm0 6h5v5h-5zm6-6h4v5h-4zm0 6h4v5h-4z"/>
                 </svg>
               ),
-              middle: <span className="text-[11px] font-medium line-clamp-1" style={{ color: c.text }}>{data.category || 'Utilities'}</span>,
-              label: 'Category',
+              sub: <span className="text-[9px] font-medium line-clamp-1" style={{ color: c.text }}>{data.category || 'Utilities'}</span>,
             },
             {
-              top: (
+              label: 'Developer',
+              big: (
                 <svg viewBox="0 0 24 24" width="18" height="18" style={{ fill: c.sub }}>
                   <path d="M12 12c2.7 0 4-1.3 4-4s-1.3-4-4-4-4 1.3-4 4 1.3 4 4 4zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z"/>
                 </svg>
               ),
-              middle: <span className="text-[11px] font-medium line-clamp-1" style={{ color: c.text }}>{data.developerName || 'Developer'}</span>,
-              label: 'Developer',
+              sub: <span className="text-[9px] font-medium line-clamp-1" style={{ color: c.text }}>{data.developerName || 'Developer'}</span>,
             },
-          ] as { top: React.ReactNode, middle: React.ReactNode, label: string }[]).map((item, idx, arr) => (
+          ] as { label: string, big: React.ReactNode, sub: React.ReactNode }[]).map((item, idx, arr) => (
             <div key={idx}
-              className="flex-1 flex flex-col items-center py-3 px-1 text-center"
-              style={{ borderRight: idx < arr.length - 1 ? `0.5px solid ${c.border}` : 'none' }}>
-              {typeof item.top === 'string'
-                ? <div className="text-[18px] font-bold leading-tight" style={{ color: c.text }}>{item.top}</div>
-                : <div className="flex justify-center">{item.top}</div>
-              }
-              {item.middle && <div className="mt-0.5 flex justify-center w-full px-1">{item.middle}</div>}
-              <div className="text-[8px] uppercase tracking-wide mt-0.5" style={{ color: c.sub }}>{item.label}</div>
+              className="flex-1 flex flex-col items-center justify-between py-2.5 px-1 text-center gap-1"
+              style={{ borderRight: idx < arr.length - 1 ? `0.5px solid ${c.border}` : 'none', minHeight: '64px' }}>
+              <div className="text-[8px] uppercase tracking-wider font-semibold" style={{ color: c.sub }}>{item.label}</div>
+              <div className="flex items-center justify-center">{item.big}</div>
+              <div className="flex justify-center w-full px-0.5">{item.sub}</div>
             </div>
           ))}
         </div>

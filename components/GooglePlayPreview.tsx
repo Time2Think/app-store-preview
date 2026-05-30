@@ -106,15 +106,26 @@ function DragScrollX({ children, className }: { children: React.ReactNode, class
 
 function StatusBar({ c }: { c: C }) {
   return (
-    <div className="flex justify-between items-center px-4 pt-4 pb-1 text-[11px] font-medium flex-shrink-0"
-      style={{ color: c.text }}>
-      <span>9:41</span>
-      <div className="flex items-center gap-1.5">
-        <svg viewBox="0 0 24 24" className="w-[13px] h-[13px] fill-current">
-          <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z" />
+    <div className="flex justify-between items-center flex-shrink-0"
+      style={{ color: c.text, height: '34px', padding: '0 16px' }}>
+      <span style={{ fontSize: '11px', fontWeight: 500 }}>9:41</span>
+      <div className="flex items-center gap-[5px]">
+        {/* Signal */}
+        <svg viewBox="0 0 18 12" width="13" height="10" className="fill-current">
+          <rect x="0" y="8" width="3" height="4" rx="0.5"/>
+          <rect x="4" y="6" width="3" height="6" rx="0.5"/>
+          <rect x="8" y="3" width="3" height="9" rx="0.5"/>
+          <rect x="12" y="0" width="3" height="12" rx="0.5"/>
         </svg>
-        <svg viewBox="0 0 24 24" className="w-[13px] h-[13px] fill-current">
-          <path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z" />
+        {/* WiFi */}
+        <svg viewBox="0 0 16 12" width="12" height="9" className="fill-current">
+          <path d="M8 11.5l1.5-1.5c-.83-.83-2.17-.83-3 0L8 11.5zm-3-3l1.5 1.5c.83-.83 2.17-.83 3 0L11 8.5c-1.66-1.66-4.34-1.66-6 0zM2 5.5l1.5 1.5c2.5-2.5 6.5-2.5 9 0L14 5.5C10.69 2.19 5.31 2.19 2 5.5z"/>
+        </svg>
+        {/* Battery */}
+        <svg viewBox="0 0 26 12" width="20" height="10">
+          <rect x="0.5" y="0.5" width="22" height="11" rx="3" ry="3" fill="none" stroke="currentColor" strokeOpacity="0.4" strokeWidth="1"/>
+          <rect x="2" y="2" width="19" height="8" rx="1.5" ry="1.5" fill="currentColor"/>
+          <rect x="23.5" y="4" width="1.5" height="4" rx="0.5" fill="currentColor" fillOpacity="0.4"/>
         </svg>
       </div>
     </div>
